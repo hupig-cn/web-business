@@ -77,12 +77,12 @@ export default function LongMenu() {
       }}
     >
       <div className={classes.divTitleName}>
-        <span style={{ float: 'left' }}>收益信息</span>
+        <span style={{ float: 'left' }}>销售信息</span>
         <span style={{ float: 'right', fontSize: '0.65rem', color: '#00000075' }}>全部 ></span>
       </div>
       <BottomNavigation showLabels className={classes.root} value={value} onChange={handleChange}>
-        <BottomNavigationAction label="当月收益" value="key1" icon={<span style={{ fontSize: '1.4rem' }}>2710.00</span>} />
-        <BottomNavigationAction label="上月收益" value="key4" icon={<span style={{ fontSize: '1.4rem' }}>5823.00</span>} />
+        <BottomNavigationAction label="本月销售额" value="key1" icon={<span style={{ fontSize: '1.4rem' }}>2710.00</span>} />
+        <BottomNavigationAction label="上月销售额" value="key4" icon={<span style={{ fontSize: '1.4rem' }}>5823.00</span>} />
       </BottomNavigation>
     </div>
   );

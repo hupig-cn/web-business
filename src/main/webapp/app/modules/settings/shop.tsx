@@ -117,9 +117,9 @@ export default function LongMenu() {
         onChange={handleChange}
       >
         <BottomNavigationAction
-          label="昨日收入：237.00"
+          label="昨日收入: 237.00"
           value="scan"
-          icon={<span style={{ fontSize: '1.4rem', marginBottom: '5px' }}>余额：18888.88</span>}
+          icon={<span style={{ fontSize: '1.4rem', marginBottom: '5px' }}>钱包: 18888.88</span>}
         />
       </BottomNavigation>
       <div style={{ height: '147px' }} />

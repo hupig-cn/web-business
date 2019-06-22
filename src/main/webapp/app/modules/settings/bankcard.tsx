@@ -77,14 +77,14 @@ export default function LongMenu() {
       }}
     >
       <div className={classes.divTitleName}>
-        <span style={{ float: 'left' }}>我的银行卡</span>
+        <span style={{ float: 'left' }}>我的店铺</span>
         <span style={{ float: 'right', fontSize: '0.65rem', color: '#00000075' }}>全部 ></span>
       </div>
       <BottomNavigation showLabels className={classes.root} value={value} onChange={handleChange}>
-        <BottomNavigationAction label="已绑定/张" value="key1" icon={<span style={{ fontSize: '1.4rem' }}>3</span>} />
+        <BottomNavigationAction label="已绑定/家" value="key1" icon={<span style={{ fontSize: '1.4rem' }}>10</span>} />
         <BottomNavigationAction
           style={{ color: '#fe4365', background: '#f0f0f0' }}
-          label="添加新的卡片"
+          label="新店开张"
           value="key4"
           icon={<ControlPointRounded style={{ height: '33px', fill: '#fe4365' }} />}
         />
