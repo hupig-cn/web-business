@@ -2,12 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from 'app/shared/reducers';
 import { getSession } from 'app/shared/reducers/authentication';
+// tslint:disable-next-line: no-submodule-imports
 import Button from '@material-ui/core/Button';
 import Selects from './selects';
 import Informationlistbox from './informationlistbox';
 
 export interface IInformationProp extends StateProps, DispatchProps {}
 
+// tslint:disable-next-line: ter-arrow-body-style
 export const Title = () => {
   return (
     <div
@@ -47,7 +49,6 @@ export const Title = () => {
           backgroundColor: '#fe4365',
           outline: 'none'
         }}
-        onClick={() => {}}
       >
         管理
       </Button>

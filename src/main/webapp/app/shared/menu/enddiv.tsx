@@ -1,4 +1,5 @@
 import React from 'react';
+// tslint:disable-next-line: no-submodule-imports
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>

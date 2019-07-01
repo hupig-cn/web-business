@@ -1,12 +1,21 @@
 import React from 'react';
+// tslint:disable-next-line: no-submodule-imports
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+// tslint:disable-next-line: no-submodule-imports
 import CssBaseline from '@material-ui/core/CssBaseline';
+// tslint:disable-next-line: no-submodule-imports
 import Typography from '@material-ui/core/Typography';
+// tslint:disable-next-line: no-submodule-imports
 import Paper from '@material-ui/core/Paper';
+// tslint:disable-next-line: no-submodule-imports
 import List from '@material-ui/core/List';
+// tslint:disable-next-line: no-submodule-imports
 import ListItem from '@material-ui/core/ListItem';
+// tslint:disable-next-line: no-submodule-imports
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+// tslint:disable-next-line: no-submodule-imports
 import ListItemText from '@material-ui/core/ListItemText';
+// tslint:disable-next-line: no-submodule-imports
 import Avatar from '@material-ui/core/Avatar';
 
 const messages = [

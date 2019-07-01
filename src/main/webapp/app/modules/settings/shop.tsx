@@ -1,9 +1,15 @@
 import React from 'react';
+// tslint:disable-next-line: no-submodule-imports
 import BottomNavigation from '@material-ui/core/BottomNavigation';
+// tslint:disable-next-line: no-submodule-imports
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+// tslint:disable-next-line: no-submodule-imports
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+// tslint:disable-next-line: no-submodule-imports
 import Avatar from '@material-ui/core/Avatar';
+// tslint:disable-next-line: no-submodule-imports
 import IconButton from '@material-ui/core/IconButton';
+// tslint:disable-next-line: no-submodule-imports
 import { ShoppingCartRounded, SettingsRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -66,7 +72,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const Loadpages = key => {
-  var temp: any = null;
+  let temp: any = null;
   switch (key) {
     case 'scan':
       break;

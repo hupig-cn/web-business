@@ -1,6 +1,9 @@
 import React from 'react';
+// tslint:disable-next-line: no-submodule-imports
 import BottomNavigation from '@material-ui/core/BottomNavigation';
+// tslint:disable-next-line: no-submodule-imports
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+// tslint:disable-next-line: no-submodule-imports
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -24,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const Loadpages = key => {
-  var temp: any = null;
+  let temp: any = null;
   switch (key) {
     case 'key1':
       break;

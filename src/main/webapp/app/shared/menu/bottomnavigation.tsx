@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import initStore from 'app/config/store';
 import { registerLocale } from 'app/config/translation';
 import Enddiv from './enddiv';
+// tslint:disable-next-line: no-submodule-imports
 import Badge from '@material-ui/core/Badge';
 import Workbench from 'app/modules/workbench/workbench';
 import Information from 'app/modules/information/information';
@@ -17,7 +18,7 @@ const store = initStore();
 registerLocale(store);
 
 export const Loadpages = key => {
-  var temp: any = null;
+  let temp: any = null;
   switch (key) {
     case 'work':
       temp = <Workbench />;

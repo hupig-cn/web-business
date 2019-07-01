@@ -1,7 +1,11 @@
 import React from 'react';
+// tslint:disable-next-line: no-submodule-imports
 import BottomNavigation from '@material-ui/core/BottomNavigation';
+// tslint:disable-next-line: no-submodule-imports
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+// tslint:disable-next-line: no-submodule-imports
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+// tslint:disable-next-line: no-submodule-imports
 import Button from '@material-ui/core/Button';
 import { SwapVertRounded } from '@material-ui/icons';
 
@@ -62,6 +66,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+// tslint:disable-next-line: ter-arrow-body-style
 export const Title = () => {
   return (
     <div
@@ -101,7 +106,6 @@ export const Title = () => {
           backgroundColor: '#fe4365',
           outline: 'none'
         }}
-        onClick={() => {}}
       >
         <SwapVertRounded />
       </Button>
@@ -110,7 +114,7 @@ export const Title = () => {
 };
 
 export const Loadpages = key => {
-  var temp: any = null;
+  let temp: any = null;
   switch (key) {
     case 'scan':
       break;

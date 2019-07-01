@@ -1,8 +1,13 @@
 import React from 'react';
+// tslint:disable-next-line: no-submodule-imports
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+// tslint:disable-next-line: no-submodule-imports
 import List from '@material-ui/core/List';
+// tslint:disable-next-line: no-submodule-imports
 import ListItem from '@material-ui/core/ListItem';
+// tslint:disable-next-line: no-submodule-imports
 import ListItemText from '@material-ui/core/ListItemText';
+// tslint:disable-next-line: no-submodule-imports
 import Divider from '@material-ui/core/Divider';
 
 const useStyles = makeStyles((theme: Theme) =>

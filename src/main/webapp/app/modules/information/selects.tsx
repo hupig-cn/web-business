@@ -1,8 +1,13 @@
 import React from 'react';
+// tslint:disable-next-line: no-submodule-imports
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+// tslint:disable-next-line: no-submodule-imports
 import AppBar from '@material-ui/core/AppBar';
+// tslint:disable-next-line: no-submodule-imports
 import Toolbar from '@material-ui/core/Toolbar';
+// tslint:disable-next-line: no-submodule-imports
 import InputBase from '@material-ui/core/InputBase';
+// tslint:disable-next-line: no-submodule-imports
 import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles((theme: Theme) =>
