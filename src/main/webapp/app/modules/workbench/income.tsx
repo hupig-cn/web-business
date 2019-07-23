@@ -65,6 +65,9 @@ const useStyles = makeStyles((theme: Theme) =>
     }
   })
 );
+const gotohomes = () => {
+  window.location.replace('http://app.yuanscore.com:8081');
+};
 
 // tslint:disable-next-line: ter-arrow-body-style
 export const Title = () => {
@@ -106,6 +109,7 @@ export const Title = () => {
           backgroundColor: '#fe4365',
           outline: 'none'
         }}
+        onClick={gotohomes}
       >
         <SwapVertRounded />
       </Button>
