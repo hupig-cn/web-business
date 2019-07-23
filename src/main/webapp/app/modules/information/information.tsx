@@ -7,6 +7,9 @@ import Button from '@material-ui/core/Button';
 import Selects from './selects';
 import Informationlistbox from './informationlistbox';
 
+// 专用接口请求模块
+import RequestLoadingWait, { Axios, Api } from 'app/request';
+
 export interface IInformationProp extends StateProps, DispatchProps {}
 
 // tslint:disable-next-line: ter-arrow-body-style
@@ -57,16 +60,35 @@ export const Title = () => {
 };
 
 export class Information extends React.Component<IInformationProp> {
+  constructor(props) {
+    super(props);
+    // 初始化接口数据结构
+    this.state = Api.tsxNotice;
+  }
+
   componentDidMount() {
     this.props.getSession();
+
+    // 动态获取最新数据
+    Axios.post(this.state.api, { username: 'sumwang', age: 18 })
+      .then(response => {
+        this.setState({ error: '', loading: false, data: response.data.data });
+      })
+      .catch(error => {
+        // TODO toast error
+        window.console.log(error);
+      });
   }
 
   render() {
     return (
       <div className="jh-information">
+        {/* 同步请求 等待视图 */}
+        <RequestLoadingWait loading={this.state.loading} />
+
         <Title />
         <Selects />
-        <Informationlistbox />
+        <Informationlistbox itemList={this.state.data} />
       </div>
     );
   }

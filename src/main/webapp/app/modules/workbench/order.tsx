@@ -15,15 +15,34 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: '#ffffff',
       height: '100%',
       borderTop: '1px solid #f0f0f0',
+
       '& button': {
         minWidth: '0px',
         outline: 'none',
         color: 'rgba(0, 0, 0, 0.64)',
         height: '100%',
+
         '& img': {
           marginBottom: 5,
           width: 28,
           height: 28
+        }
+      },
+      '&[ws-container-id="responsive"]': {
+        display: 'inline-block',
+
+        '& > button': {
+          width: '50%',
+          display: 'block',
+          float: 'left',
+          maxWidth: '50%',
+          '&:nth-child(1),&:nth-child(2)': {
+            borderBottom: '1px solid #eaedf1',
+            marginTop: '5px'
+          },
+          '&:nth-child(even)': {
+            borderLeft: '1px solid #eaedf1'
+          }
         }
       }
     },
@@ -55,7 +74,7 @@ export const Loadpages = key => {
   }
 };
 
-export default function LongMenu() {
+export default function LongMenu(props) {
   const classes = useStyles();
   const [value] = React.useState('home');
 
@@ -76,11 +95,27 @@ export default function LongMenu() {
         <span style={{ float: 'left' }}>订单管理</span>
         <span style={{ float: 'right', fontSize: '0.65rem', color: '#00000075' }}>更多 ></span>
       </div>
-      <BottomNavigation showLabels className={classes.root} value={value} onChange={handleChange}>
-        <BottomNavigationAction label="待支付" value="key1" icon={<span style={{ fontSize: '1.4rem' }}>10</span>} />
-        <BottomNavigationAction label="已支付" value="key2" icon={<span style={{ fontSize: '1.4rem' }}>510</span>} />
-        <BottomNavigationAction label="退款" value="key3" icon={<span style={{ fontSize: '1.4rem' }}>3</span>} />
-        <BottomNavigationAction label="当日订单" value="key4" icon={<span style={{ fontSize: '1.4rem' }}>523</span>} />
+      <BottomNavigation ws-container-id="responsive" showLabels className={classes.root} value={value} onChange={handleChange}>
+        <BottomNavigationAction
+          label="待支付"
+          value="key1"
+          icon={<span style={{ fontSize: '1.4rem' }}>{props.order.unpaid ? props.order.unpaid : 0}</span>}
+        />
+        <BottomNavigationAction
+          label="已支付"
+          value="key2"
+          icon={<span style={{ fontSize: '1.4rem' }}>{props.order.paid ? props.order.paid : 0}</span>}
+        />
+        <BottomNavigationAction
+          label="退款"
+          value="key3"
+          icon={<span style={{ fontSize: '1.4rem' }}>{props.order.refund ? props.order.refund : 0}</span>}
+        />
+        <BottomNavigationAction
+          label="当日订单"
+          value="key4"
+          icon={<span style={{ fontSize: '1.4rem' }}>{props.order.day_order ? props.order.day_order : 0}</span>}
+        />
       </BottomNavigation>
     </div>
   );

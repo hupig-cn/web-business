@@ -130,7 +130,7 @@ export const Loadpages = key => {
   }
 };
 
-export default function LongMenu() {
+export default function LongMenu(props) {
   const classes = useStyles();
   const [value] = React.useState('home');
 
@@ -153,8 +153,16 @@ export default function LongMenu() {
         value={value}
         onChange={handleChange}
       >
-        <BottomNavigationAction label="今日收入" value="scan" icon={<span style={{ fontSize: '1.5rem' }}>5123.00</span>} />
-        <BottomNavigationAction label="今日订单量" value="pay" icon={<span style={{ fontSize: '1.5rem' }}>2173</span>} />
+        <BottomNavigationAction
+          label="今日收入"
+          value="scan"
+          icon={<span style={{ fontSize: '1.5rem' }}>{props.income.today_income ? props.income.today_income : 0}</span>}
+        />
+        <BottomNavigationAction
+          label="今日订单量"
+          value="pay"
+          icon={<span style={{ fontSize: '1.5rem' }}>{props.income.day_order ? props.income.day_order : 0}</span>}
+        />
       </BottomNavigation>
       <div style={{ height: '117px' }} />
       <img

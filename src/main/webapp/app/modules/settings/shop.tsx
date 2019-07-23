@@ -88,7 +88,7 @@ export const Loadpages = key => {
   }
 };
 
-export default function LongMenu() {
+export default function LongMenu(props) {
   const classes = useStyles();
   const [value] = React.useState('home');
 
@@ -99,15 +99,15 @@ export default function LongMenu() {
   return (
     <div>
       <div style={{ backgroundColor: '#fe4365', height: '60px', position: 'fixed', top: '0px', width: '100%', zIndex: 1000 }}>
-        <Avatar alt="photo" src="./content/images/title.png" className={classes.bigAvatar} />
+        <Avatar alt="photo" src={props.shop ? props.shop.logo : './content/images/title.png'} className={classes.bigAvatar} />
         <div className={classes.namePlusSetting}>
           <div className={classes.nameOne}>
-            <span className={classes.name}>店铺名称</span>
+            <span className={classes.name}>{props.shop ? props.shop.shop_name : '-'}</span>
             <IconButton color="primary" aria-label="setting" style={{ padding: '0px', float: 'right', outline: 'none' }}>
               <SettingsRounded />
             </IconButton>
           </div>
-          <div className={classes.login}>13800138000</div>
+          <div className={classes.login}>{props.shop ? props.shop.hot_line : '-未公开-'}</div>
         </div>
       </div>
       <BottomNavigation
@@ -123,9 +123,9 @@ export default function LongMenu() {
         onChange={handleChange}
       >
         <BottomNavigationAction
-          label="昨日收入: 237.00"
+          label={props.shop ? '昨日收入：' + props.shop.yestoday_income : '昨日收入：' + 0}
           value="scan"
-          icon={<span style={{ fontSize: '1.4rem', marginBottom: '5px' }}>钱包: 18888.88</span>}
+          icon={<span style={{ fontSize: '1.4rem', marginBottom: '5px' }}>钱包: {props.shop ? props.shop.balance : 0}</span>}
         />
       </BottomNavigation>
       <div style={{ height: '147px' }} />

@@ -27,13 +27,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function ListDividers() {
+export default function ListDividers(props) {
   const classes = useStyles();
 
   return (
     <List component="nav" className={classes.root} aria-label="Mailbox folders">
       <ListItem button style={{ padding: '0px 16px 0px 16px' }}>
-        <ListItemText primary="累计销售额" secondary="215881.00" />
+        <ListItemText primary="累计销售额" secondary={props.entrys ? props.entrys.amount : 0} />
         <span>></span>
       </ListItem>
       <Divider />

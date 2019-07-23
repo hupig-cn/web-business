@@ -55,12 +55,20 @@ export const Loadpages = key => {
   }
 };
 
-export default function LongMenu() {
+export default function LongMenu(props) {
   const classes = useStyles();
   const [value] = React.useState('home');
 
   function handleChange(event: React.ChangeEvent<{}>, newValue: string) {
     Loadpages(newValue);
+  }
+  function formatNumberViewText(num: any) {
+    num = parseInt(num.replace(/\ |,/g, ''), 10);
+    const d = parseInt(num / 1000, 10);
+    if (d >= 1) {
+      return d + 'k' + (num % 1000 ? '+' : '');
+    }
+    return num;
   }
 
   return (
@@ -77,9 +85,21 @@ export default function LongMenu() {
         <span style={{ float: 'right', fontSize: '0.65rem', color: '#00000075' }}>更多 ></span>
       </div>
       <BottomNavigation showLabels className={classes.root} value={value} onChange={handleChange}>
-        <BottomNavigationAction label="出售中" value="key1" icon={<span style={{ fontSize: '1.4rem' }}>215</span>} />
-        <BottomNavigationAction label="已下架" value="key2" icon={<span style={{ fontSize: '1.4rem' }}>41</span>} />
-        <BottomNavigationAction label="草稿中" value="key3" icon={<span style={{ fontSize: '1.4rem' }}>16</span>} />
+        <BottomNavigationAction
+          label="出售中"
+          value="key1"
+          icon={<span style={{ fontSize: '1.4rem' }}>{props.commodity.onsale ? formatNumberViewText(props.commodity.onsale) : 0}</span>}
+        />
+        <BottomNavigationAction
+          label="已下架"
+          value="key2"
+          icon={<span style={{ fontSize: '1.4rem' }}>{props.commodity.takedown ? formatNumberViewText(props.commodity.takedown) : 0}</span>}
+        />
+        <BottomNavigationAction
+          label="草稿中"
+          value="key3"
+          icon={<span style={{ fontSize: '1.4rem' }}>{props.commodity.draft ? formatNumberViewText(props.commodity.draft) : 0}</span>}
+        />
         <BottomNavigationAction
           style={{ color: '#fe4365', background: '#f0f0f0' }}
           label="添加商品"

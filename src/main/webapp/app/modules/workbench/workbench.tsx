@@ -8,20 +8,41 @@ import Workicon from './workicon';
 import Order from './order';
 import Commodity from './commodity';
 
+// 专用接口请求模块
+import RequestLoadingWait, { Axios, Api } from 'app/request';
+
 export interface IPersonalProp extends StateProps, DispatchProps {}
 
 export class Personal extends React.Component<IPersonalProp> {
+  constructor(props) {
+    super(props);
+    // 初始化接口数据结构
+    this.state = Api.tsxBusiness;
+  }
   componentDidMount() {
     this.props.getSession();
+
+    // 动态获取最新数据
+    Axios.post(this.state.api, { username: 'sumwang', age: 18 })
+      .then(response => {
+        this.setState({ loading: false, data: response.data.data });
+      })
+      .catch(error => {
+        // TODO toast error
+        window.console.log(error);
+      });
   }
 
   render() {
+    const repos = this.state.data;
     return (
       <div className="jh-personal">
-        <Income />
+        {/* 同步请求 等待视图 */}
+        <RequestLoadingWait loading={this.state.loading} />
+        <Income income={repos.income} />
         <Workicon />
-        <Order />
-        <Commodity />
+        <Order order={repos.order} />
+        <Commodity commodity={repos.commodity} />
       </div>
     );
   }

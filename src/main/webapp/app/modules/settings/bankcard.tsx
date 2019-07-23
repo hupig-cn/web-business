@@ -62,7 +62,7 @@ export const Loadpages = key => {
   }
 };
 
-export default function LongMenu() {
+export default function LongMenu(props) {
   const classes = useStyles();
   const [value] = React.useState('home');
 
@@ -84,7 +84,11 @@ export default function LongMenu() {
         <span style={{ float: 'right', fontSize: '0.65rem', color: '#00000075' }}>全部 ></span>
       </div>
       <BottomNavigation showLabels className={classes.root} value={value} onChange={handleChange}>
-        <BottomNavigationAction label="已绑定/家" value="key1" icon={<span style={{ fontSize: '1.4rem' }}>10</span>} />
+        <BottomNavigationAction
+          label="已绑定/家"
+          value="key1"
+          icon={<span style={{ fontSize: '1.4rem' }}>{props.bankcard ? props.bankcard.bind_totals : 0}</span>}
+        />
         <BottomNavigationAction
           style={{ color: '#fe4365', background: '#f0f0f0' }}
           label="新店开张"
