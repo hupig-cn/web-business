@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 const gotohomes = () => {
-  window.open('http://app.yuanscore.com:8081');
+  window.location.replace('http://app.yuanscore.com:8081');
 };
 
 // tslint:disable-next-line: ter-arrow-body-style
