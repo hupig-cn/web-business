@@ -70,7 +70,7 @@ const gotohomes = () => {
 };
 
 // tslint:disable-next-line: ter-arrow-body-style
-export const Title = () => {
+export const Title = props => {
   return (
     <div
       style={{
@@ -93,7 +93,7 @@ export const Title = () => {
           color: '#fffde5'
         }}
       >
-        店铺的名字
+        {props.name}
       </span>
       <Button
         type="button"
@@ -144,7 +144,7 @@ export default function LongMenu(props) {
 
   return (
     <div>
-      <Title />
+      <Title shop={props.shop} />
       <BottomNavigation
         style={{
           position: 'fixed',

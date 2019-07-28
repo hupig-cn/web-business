@@ -5,11 +5,32 @@ import { bindActionCreators } from 'redux';
 
 import initStore from './config/store';
 import { registerLocale } from './config/translation';
+import ErrorBoundary from './shared/error/error-boundary';
+
+// ========
 import setupAxiosInterceptors from './config/axios-interceptor';
 import { clearAuthentication } from './shared/reducers/authentication';
 import AppComponent from './app';
 import { loadIcons } from './config/icon-loader';
+// ========
 
+const store = initStore();
+registerLocale(store);
+const rootEl = document.getElementById('root');
+const render = Component =>
+  ReactDOM.render(
+    <ErrorBoundary>
+      <Provider store={store}>
+        <div>
+          <Component />
+        </div>
+      </Provider>
+    </ErrorBoundary>,
+    rootEl
+  );
+render(AppComponent);
+
+/*
 const store = initStore();
 registerLocale(store);
 
@@ -29,3 +50,4 @@ const render = Component =>
   );
 
 render(AppComponent);
+*/

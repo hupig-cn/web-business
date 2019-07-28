@@ -110,6 +110,13 @@ export const getSession = () => async (dispatch, getState) => {
   }
 };
 
+// tslint:disable-next-line: ter-arrow-body-style
+export const getSessionRE = () => async (dispatch, getState) => {
+  return {
+    payload: axios.get('services/login/api/account')
+  };
+};
+
 export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
   const result = await dispatch({
     type: ACTION_TYPES.LOGIN,

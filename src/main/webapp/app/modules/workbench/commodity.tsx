@@ -62,8 +62,8 @@ export default function LongMenu(props) {
   function handleChange(event: React.ChangeEvent<{}>, newValue: string) {
     Loadpages(newValue);
   }
-  function formatNumberViewText(num: any) {
-    num = parseInt(num.replace(/\ |,/g, ''), 10);
+  function formatNumberViewText(num: string) {
+    num = parseInt(('' + num).replace(/\ |,/g, ''), 10);
     const d = parseInt(num / 1000, 10);
     if (d >= 1) {
       return d + 'k' + (num % 1000 ? '+' : '');
@@ -88,7 +88,11 @@ export default function LongMenu(props) {
         <BottomNavigationAction
           label="出售中"
           value="key1"
-          icon={<span style={{ fontSize: '1.4rem' }}>{props.commodity.onsale ? formatNumberViewText(props.commodity.onsale) : 0}</span>}
+          icon={
+            <span style={{ fontSize: '1.4rem' }}>
+              {typeof props.commodity.onsale !== undefined ? formatNumberViewText(props.commodity.onsale) : 0}
+            </span>
+          }
         />
         <BottomNavigationAction
           label="已下架"

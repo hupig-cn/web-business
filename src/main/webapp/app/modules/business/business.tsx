@@ -3,13 +3,13 @@ import './business.scss';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getSession } from 'app/shared/reducers/authentication';
+import { getSession, getSessionRE } from 'app/shared/reducers/authentication';
 
 import Workbench from '../workbench/workbench';
 import Enddiv from '../../shared/menu/enddiv';
+import BottomNavigation from 'app/shared/menu/bottomnavigation';
 
 export interface IHomeProp extends StateProps, DispatchProps {}
-
 export class Home extends React.Component<IHomeProp> {
   componentDidMount() {
     this.props.getSession();
@@ -20,6 +20,7 @@ export class Home extends React.Component<IHomeProp> {
       <div className="jh-body">
         <Workbench />
         <Enddiv />
+        <BottomNavigation bottomNav="work" />
       </div>
     );
   }
@@ -30,7 +31,7 @@ const mapStateToProps = storeState => ({
   isAuthenticated: storeState.authentication.isAuthenticated
 });
 
-const mapDispatchToProps = { getSession };
+const mapDispatchToProps = { getSession, getSessionRE };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

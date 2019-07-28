@@ -12,6 +12,8 @@ import IconButton from '@material-ui/core/IconButton';
 // tslint:disable-next-line: no-submodule-imports
 import { ShoppingCartRounded, SettingsRounded } from '@material-ui/icons';
 
+import { Link } from 'react-router-dom';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -90,7 +92,7 @@ export const Loadpages = key => {
 
 export default function LongMenu(props) {
   const classes = useStyles();
-  const [value] = React.useState('home');
+  const [value] = React.useState();
 
   function handleChange(event: React.ChangeEvent<{}>, newValue: string) {
     Loadpages(newValue);
@@ -103,9 +105,11 @@ export default function LongMenu(props) {
         <div className={classes.namePlusSetting}>
           <div className={classes.nameOne}>
             <span className={classes.name}>{props.shop ? props.shop.shop_name : '-'}</span>
-            <IconButton color="primary" aria-label="setting" style={{ padding: '0px', float: 'right', outline: 'none' }}>
-              <SettingsRounded />
-            </IconButton>
+            <Link style={{ float: 'right' }} to="/manage">
+              <IconButton color="primary" aria-label="setting" style={{ padding: '0px', float: 'right', outline: 'none' }}>
+                <SettingsRounded />
+              </IconButton>
+            </Link>
           </div>
           <div className={classes.login}>{props.shop ? props.shop.hot_line : '-未公开-'}</div>
         </div>
@@ -123,9 +127,23 @@ export default function LongMenu(props) {
         onChange={handleChange}
       >
         <BottomNavigationAction
-          label={props.shop ? '昨日收入：' + props.shop.yestoday_income : '昨日收入：' + 0}
+          sl-dat="234"
+          label={props.shop ? '昨日收入：' + props.shop.yestoday_income : '昨日收入：0.00'}
           value="scan"
-          icon={<span style={{ fontSize: '1.4rem', marginBottom: '5px' }}>钱包: {props.shop ? props.shop.balance : 0}</span>}
+          icon={
+            <Link to="/wallet">
+              <span
+                style={{
+                  fontWeight: 'normal',
+                  color: '#fff',
+                  fontSize: '1.4rem',
+                  marginBottom: '5px'
+                }}
+              >
+                钱包: {props.shop ? props.shop.balance : '0.00'}
+              </span>
+            </Link>
+          }
         />
       </BottomNavigation>
       <div style={{ height: '147px' }} />

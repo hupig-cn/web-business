@@ -1,11 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from 'app/shared/reducers';
-import { getSession } from 'app/shared/reducers/authentication';
+import { getSession, getSessionRE } from 'app/shared/reducers/authentication';
 // tslint:disable-next-line: no-submodule-imports
 import Button from '@material-ui/core/Button';
 import Selects from './selects';
 import Informationlistbox from './informationlistbox';
+import Enddiv from '../../shared/menu/enddiv';
+import BottomNavigation from 'app/shared/menu/bottomnavigation';
 
 // 专用接口请求模块
 import RequestLoadingWait, { Axios, Api } from 'app/request';
@@ -69,10 +71,30 @@ export class Information extends React.Component<IInformationProp> {
   componentDidMount() {
     this.props.getSession();
 
+    this.props.getSessionRE().then((val: any) => {
+      val.payload.then((info: any) => {
+        info.config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+        Axios.defaults.headers = info.config.headers;
+        // Axios.defaults.baseURL = '';
+
+        // 动态获取最新数据
+        Axios.post(this.state.api, { loginName: info.data.login, id: info.data.id })
+          // Axios.get("http://localhost:8082/services/login/api/account", { loginName: info.data.login, id: info.data.id })
+          .then(response => {
+            this.setState({ loading: false, data: response.data.data });
+          })
+          .catch(error => {
+            // TODO toast error
+            window.console.log(error);
+          });
+      });
+    });
+
     // 动态获取最新数据
-    Axios.post(this.state.api, { username: 'sumwang', age: 18 })
+    Axios.post(this.state.api, {})
+      // Axios.get("http://localhost:8082/services/login/api/account", { loginName: info.data.login, id: info.data.id })
       .then(response => {
-        this.setState({ error: '', loading: false, data: response.data.data });
+        this.setState({ loading: false, data: response.data.data });
       })
       .catch(error => {
         // TODO toast error
@@ -89,6 +111,8 @@ export class Information extends React.Component<IInformationProp> {
         <Title />
         <Selects />
         <Informationlistbox itemList={this.state.data} />
+        <Enddiv />
+        <BottomNavigation bottomNav="information" />
       </div>
     );
   }
@@ -99,7 +123,7 @@ const mapStateToProps = ({ authentication }: IRootState) => ({
   isAuthenticated: authentication.isAuthenticated
 });
 
-const mapDispatchToProps = { getSession };
+const mapDispatchToProps = { getSession, getSessionRE };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
