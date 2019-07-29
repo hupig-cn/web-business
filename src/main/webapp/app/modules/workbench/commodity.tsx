@@ -63,9 +63,12 @@ export default function LongMenu(props) {
     Loadpages(newValue);
   }
   function formatNumberViewText(num: string) {
+    // @ts-ignore
     num = parseInt(('' + num).replace(/\ |,/g, ''), 10);
+    // @ts-ignore
     const d = parseInt(num / 1000, 10);
     if (d >= 1) {
+      // @ts-ignore
       return d + 'k' + (num % 1000 ? '+' : '');
     }
     return num;

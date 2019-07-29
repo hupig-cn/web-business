@@ -71,6 +71,7 @@ export class Information extends React.Component<IInformationProp> {
   componentDidMount() {
     this.props.getSession();
 
+    // @ts-ignore
     this.props.getSessionRE().then((val: any) => {
       val.payload.then((info: any) => {
         info.config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -78,6 +79,7 @@ export class Information extends React.Component<IInformationProp> {
         // Axios.defaults.baseURL = '';
 
         // 动态获取最新数据
+        // @ts-ignore
         Axios.post(this.state.api, { loginName: info.data.login, id: info.data.id })
           // Axios.get("http://localhost:8082/services/login/api/account", { loginName: info.data.login, id: info.data.id })
           .then(response => {
@@ -91,6 +93,7 @@ export class Information extends React.Component<IInformationProp> {
     });
 
     // 动态获取最新数据
+    // @ts-ignore
     Axios.post(this.state.api, {})
       // Axios.get("http://localhost:8082/services/login/api/account", { loginName: info.data.login, id: info.data.id })
       .then(response => {
@@ -106,11 +109,17 @@ export class Information extends React.Component<IInformationProp> {
     return (
       <div className="jh-information">
         {/* 同步请求 等待视图 */}
-        <RequestLoadingWait loading={this.state.loading} />
+        <RequestLoadingWait
+          // @ts-ignore
+          loading={this.state.loading}
+        />
 
         <Title />
         <Selects />
-        <Informationlistbox itemList={this.state.data} />
+        <Informationlistbox
+          // @ts-ignore
+          itemList={this.state.data}
+        />
         <Enddiv />
         <BottomNavigation bottomNav="information" />
       </div>

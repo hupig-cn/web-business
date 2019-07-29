@@ -36,12 +36,14 @@ export class Wallet extends React.Component<IHomeProp> {
         Axios.defaults.headers = info.config.headers;
         // Axios.defaults.baseURL = '';
 
+        // tslint:disable-next-line: no-this-assignment
         const that = this;
+        // @ts-ignore
         const args = PathInfoParse();
-
+        // @ts-ignore
         Axios.all([this.api_findWithdrawInfo(args[1])]).then(
-          // tslint:disable-next-line: only-arrow-functions
           // @ts-ignore
+          // tslint:disable-next-line: only-arrow-functions
           Axios.spread(function(findWithdrawInfo) {
             // 检查并纠正服务端数据格式
             findWithdrawInfo.data = Api.responseParse(findWithdrawInfo.data, {});
@@ -73,7 +75,9 @@ export class Wallet extends React.Component<IHomeProp> {
   }
 
   render() {
+    // @ts-ignore
     const { data } = this.state;
+    // @ts-ignore
     return this.state.progressive === true ? (
       <div className="jh-body">
         <Title name="提现详情" back="/wallet" />

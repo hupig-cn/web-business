@@ -110,10 +110,13 @@ export const Api = {
     const objv = obj => Object.prototype.toString.call(obj) === '[object Object]';
     const arrv = arr => Object.prototype.toString.call(arr) === '[object Array]';
 
+    // @ts-ignore
     if (response.data === undefined || response.data === null || response.data === '') {
       response['data'] = dataType;
     }
+    // @ts-ignore
     if (arrv(response.data) && response.data['0'] !== undefined && objv(dataType)) {
+      // @ts-ignore
       response['data'] = response.data['0'];
     }
     return response;

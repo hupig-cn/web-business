@@ -41,6 +41,7 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
   // TODO 上拉加载组件
   buildStablePage = () => {
     // @ts-ignore
+    // tslint:disable-next-line: no-this-assignment
     const that = this;
     // @ts-ignore
     this.props.getSessionRE().then((val: any) => {
@@ -48,9 +49,11 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
         info.config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
         Axios.defaults.headers = info.config.headers;
         // Axios.defaults.baseURL = '';
+        // @ts-ignore
         Axios.all([this.api_findUserBalance(info.data.id), this.api_findAllUserBankCard(info.data.id)]).then(
           // tslint:disable-next-line: only-arrow-functions
           // @ts-ignore
+          // tslint:disable-next-line: only-arrow-functions
           Axios.spread(function(findUserBalance, findAllUserBankCard) {
             // 检查并纠正服务端数据格式
             findAllUserBankCard.data = Api.responseParse(findAllUserBankCard.data, []);
@@ -94,12 +97,16 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
   handelSubmit = (e: any) => {
     e.preventDefault();
     const state = this.state;
+    // @ts-ignore
     const ab_balance = parseFloat(state.data.account.availableBalance.replace(/\ |,/g, '')) * 1;
 
     const post = {
+      // @ts-ignore
       bankcardid: Utils.numberValidate(state.bankcard),
       gatheringway: 1, // TODO 目前只开银行卡  1:银行卡/ 2:微信/ 3:支付宝
+      // @ts-ignore
       withdrawalamount: Utils.priceValidate(state.amount),
+      // @ts-ignore
       userid: state.AUTHORUSER.data.id || 0
     };
 
@@ -151,12 +158,16 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
   };
 
   inputAmount = (e: any) => {
+    // @ts-ignore
     const value = Utils.priceValidate(e.target.value);
+    // @ts-ignore
     const ab_balance = parseFloat(this.state.data.account.availableBalance.replace(/\ |,/g, '')) * 1;
+    // tslint:disable-next-line: no-console
     console.log(typeof value, value);
     // 提现金额输入错误或超出可提现金额边界
     if (value === false || value > ab_balance) {
       // this.lockSbmitBtn(true);
+      // @ts-ignore
       return this.state.amount;
     }
     this.lockSbmitBtn(false);
@@ -168,13 +179,16 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
   };
 
   render() {
+    // @ts-ignore
     const data = this.state.data;
     const bankList = !data.bank
       ? null
       : data.bank.map((item: object) => (
           <label
             onClick={this.changeBank}
+            // @ts-ignore
             htmlFor={'bankcard_' + item.id}
+            // @ts-ignore
             key={item.id}
             style={{
               width: '100vw',
@@ -210,7 +224,11 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
                   overflow: 'hidden'
                 }}
               >
-                {item.bankname}（尾号 {item.banknum}） {item.bankuser}{' '}
+                {
+                  // @ts-ignore
+                  item.bankname
+                }
+                （尾号 {item.banknum}） {item.bankuser}{' '}
               </li>
               <li
                 style={{
@@ -225,11 +243,18 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
                   float: 'right'
                 }}
               >
-                <input id={'bankcard_' + item.id} type="radio" name="bankcard" value={item.id} />
+                <input
+                  // @ts-ignore
+                  id={'bankcard_' + item.id}
+                  type="radio"
+                  name="bankcard"
+                  value={item.id}
+                />
               </li>
             </ul>
           </label>
         ));
+    // @ts-ignore
     return this.state.progressive === true ? (
       <div className="jh-body">
         <Title name="申请提现" back="/wallet" />
@@ -306,6 +331,7 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
                 value=""
                 placeholder="￥"
                 autoComplete="off"
+                // @ts-ignore
                 value={this.state.amount}
                 onChange={this.inputAmount}
                 style={{

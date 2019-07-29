@@ -11,7 +11,6 @@ import Badge from '@material-ui/core/Badge';
 import Workbench from 'app/modules/workbench/workbench';
 import Information from 'app/modules/information/information';
 import Settings from 'app/modules/settings/settings';
-import Shopsettings from 'app/modules/settings/shopmanage/mysettings';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) =>

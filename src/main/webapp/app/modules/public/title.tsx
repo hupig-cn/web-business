@@ -9,7 +9,12 @@ export default function PrimarySearchAppBar(text) {
   const titleHeight = '50px';
 
   const infostyle = { position: 'fixed', right: '10px', lineHeight: titleHeight, height: titleHeight, color: '#fff' };
-  let info = <span style={infostyle} />;
+  let info = (
+    <span
+      // @ts-ignore
+      style={infostyle}
+    />
+  );
   if (text.infoname) {
     info = text.infoname;
     if (text.infoto) {
@@ -19,7 +24,14 @@ export default function PrimarySearchAppBar(text) {
         </Link>
       );
     }
-    info = <span style={infostyle}>{info}</span>;
+    info = (
+      <span
+        // @ts-ignore
+        style={infostyle}
+      >
+        {info}
+      </span>
+    );
   }
   return (
     <div ws-container-id="title">

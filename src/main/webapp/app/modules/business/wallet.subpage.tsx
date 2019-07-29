@@ -69,6 +69,7 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'center',
       height: '60px',
       float: 'left',
+      // @ts-ignore
       textAlign: 'center',
       lineHeight: '25px',
       fontSize: '0.9rem'
@@ -136,6 +137,7 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'left',
       textIndent: '15px'
     },
+    // @ts-ignore
     waterListAmount: {
       width: '40vw',
       textAlign: 'right',
@@ -182,12 +184,23 @@ export default function BottomAppBar(props) {
   return (
     <React.Fragment>
       <div ws-container-id="tbody" style={{ position: 'fixed' }}>
-        <div className={classes.moneyinfo}>￥{props.account ? props.account.balance : '0.000'}</div>
-        <div className={classes.moneyInfoAmount}>
+        <div
+          // @ts-ignore
+          className={classes.moneyinfo}
+        >
+          ￥{props.account ? props.account.balance : '0.000'}
+        </div>
+        <div
+          // @ts-ignore
+          className={classes.moneyInfoAmount}
+        >
           冻结资金
           <br />￥{props.account ? props.account.frozenBalance : '0.000'}
         </div>
-        <div className={classes.moneyInfoAmount}>
+        <div
+          // @ts-ignore
+          className={classes.moneyInfoAmount}
+        >
           可提现资金
           <br />￥{props.account ? props.account.availableBalance : '0.000'}
         </div>
@@ -199,15 +212,31 @@ export default function BottomAppBar(props) {
       </div>
       <div style={{ clear: 'both', height: '0', width: '0' }} />
 
-      <div className={classes.waterTitle}>提现账单记录</div>
+      <div
+        // @ts-ignore
+        className={classes.waterTitle}
+      >
+        提现账单记录
+      </div>
 
-      <div className={classes.waterList}>
+      <div
+        // @ts-ignore
+        className={classes.waterList}
+      >
         <ul>
           {/* item.type : 2入账  1出账 */
           waterlist.map(item => (
             <li key={item.id}>
-              <Link className={classes.primaryALink} to={'/withdrawDetail/' + item.id}>
-                <div className={classes.waterListTitle}>
+              v
+              <Link
+                // @ts-ignore
+                className={classes.primaryALink}
+                to={'/withdrawDetail/' + item.id}
+              >
+                <div
+                  // @ts-ignore
+                  className={classes.waterListTitle}
+                >
                   {item.type === '2'
                     ? '提现失败，资金退回'
                     : item.title
@@ -215,16 +244,30 @@ export default function BottomAppBar(props) {
                     : '申请（' + $config.withdrawType[Number(item.type)] + '）提现'}
                 </div>
               </Link>
-
-              <div className={classes.waterListAmount} refuned={'t' + item.type}>
-                {item.type === '1' ? '-' + item.amount : '+' + item.amount}
-              </div>
-
-              <Link className={classes.primaryALink} to={'/withdrawDetail/' + item.id}>
-                <div className={classes.waterListTitle}>{item.createdate.substring(0, 16)}</div>
+              {
+                // @ts-ignore
+                <div className={classes.waterListAmount} refuned={'t' + item.type}>
+                  {item.type === '1' ? '-' + item.amount : '+' + item.amount}
+                </div>
+              }
+              <Link
+                // @ts-ignore
+                className={classes.primaryALink}
+                to={'/withdrawDetail/' + item.id}
+              >
+                <div
+                  // @ts-ignore
+                  className={classes.waterListTitle}
+                >
+                  {item.createdate.substring(0, 16)}
+                </div>
               </Link>
-
-              <div className={classes.waterListBalance}>{item.afteramount ? item.afteramount : '0.00'}</div>
+              <div
+                // @ts-ignore
+                className={classes.waterListBalance}
+              >
+                {item.afteramount ? item.afteramount : '0.00'}
+              </div>
             </li>
           ))}
           <li className="nothing">~没有更多了~</li>
