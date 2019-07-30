@@ -72,7 +72,7 @@ export class Manage extends React.Component<IManageProp> {
         Axios.all([this.api_cardlist(), this.api_findUserBankcardList(info.data.id)]).then(
           // tslint:disable-next-line: only-arrow-functions
           // @ts-ignore
-          Axios.spread(function(cardlist, findUserBankcardList) {
+          Axios.spread((cardlist, findUserBankcardList) => {
             // 检查并纠正服务端数据格式
             cardlist.data = Api.responseParse(cardlist.data, []);
             findUserBankcardList.data = Api.responseParse(findUserBankcardList.data, []);
@@ -108,6 +108,7 @@ export class Manage extends React.Component<IManageProp> {
             { code: 'cgb', name: '中国广发银行', status: 1 },
             { code: 'cmbc', name: '中国民生银行', status: 1 }
           ];
+          response.data.data['userCardList'] = response.data.data['cardlist'];
           this.setState({ loading: false, progressive: false, data: response.data.data });
         })
         .catch(error => {
@@ -189,26 +190,31 @@ export class Manage extends React.Component<IManageProp> {
       return (
         <div className="jh-personal">
           <Title name="银行卡" back="/manage" />
-          {state.dataError === undefined ? <ShowBodyPlaceholderHtml /> : <ShowBodyPlaceholderHtml msgtext={state.dataError} />}
+          <ShowBodyPlaceholderHtml />
         </div>
       );
     }
 
-    if (state.form_banknum !== '' && state.form_bank !== '' && state.form_bankuser !== '') {
-      JQ('button[type="submit"')
-        .css('background', '#1976d2')
-        .removeAttr('disabled');
-    } else {
-      JQ('button[type="submit"')
-        .css('background', '')
-        .attr('disabled', 'disabled');
+    try {
+      // @ts-ignore
+      if (state.form_banknum !== '' && state.form_bank !== '' && state.form_bankuser !== '') {
+        JQ('button[type="submit"]')
+          .css('background', '#1976d2')
+          .removeAttr('disabled');
+      } else {
+        JQ('button[type="submit"]')
+          .css('background', '')
+          .attr('disabled', 'disabled');
+      }
+    } catch (e) {
+      window.console.log(e);
     }
 
     {
       /* 卡片开始 */
     }
     // @ts-ignore
-    const userCardList = state.data.userCardList.map((item: object, index) => (
+    const userCardList = state.data.userCardList.map((item: object, index: number) => (
       <div
         key={index + 1}
         className="card"
