@@ -107,6 +107,7 @@ export class Wallet extends React.Component<IHomeProp> {
         <WithDraWater
           // @ts-ignore
           waterlist={this.state.data.list}
+          // @ts-ignore
           account={this.state.data.account}
         />
 

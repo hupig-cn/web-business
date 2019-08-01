@@ -305,11 +305,15 @@ export class Manage extends React.Component<IManageProp> {
           <div style={{ height: '20px', width: '100%' }}>
             <div style={{ display: 'none' }}>
               <Link to="">绑定</Link>
-              <Link to="">解绑</Link>
+              <Link
+                to=""
+                // @ts-ignore
+              >
+                解绑
+              </Link>
             </div>
-          </div>
-          {// @ts-ignore
-          state.data.userCardList.length > 0 ? (
+          </div>{' '}
+          {state.data.userCardList.length > 0 ? (
             <div
               style={{
                 fontSize: '0.9rem',
@@ -327,10 +331,11 @@ export class Manage extends React.Component<IManageProp> {
             </div>
           ) : (
             ''
-          )}
-          {userCardList}
-          {// @ts-ignore
-          state.data.userCardList.length > 0 ? (
+          )
+          // @ts-ignore
+          }
+          {userCardList}{' '}
+          {state.data.userCardList.length > 0 ? (
             <div
               style={{
                 width: '100vw',
@@ -355,9 +360,10 @@ export class Manage extends React.Component<IManageProp> {
             >
               您还没有绑定银行卡 ?
             </div>
-          )}{' '}
-          {// @ts-ignore
-          state.data.userCardList.length < 4 ? (
+          )
+          // @ts-ignore
+          }{' '}
+          {state.data.userCardList.length < 4 ? (
             <div className="addAccount" style={{ fontSize: '0.8rem' }}>
               <form method="post" onSubmit={this.handelSubmit}>
                 <div style={{ width: '100vw', height: '50px' }}>
@@ -380,11 +386,14 @@ export class Manage extends React.Component<IManageProp> {
                       value={state.form_bank}
                       onChange={this.changeBank}
                     >
-                      <option key="SB000001" value="">
+                      <option
+                        key="SB000001"
+                        // @ts-ignore
+                        value=""
+                      >
                         请选择
-                      </option>
-                      {// @ts-ignore
-                      state.data.list_of_bank_support.map((bank, index) => (
+                      </option>{' '}
+                      {state.data.list_of_bank_support.map((bank, index) => (
                         <option key={index} value={bank.code}>
                           {bank.bankname}
                         </option>
