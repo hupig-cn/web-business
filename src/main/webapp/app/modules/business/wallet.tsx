@@ -45,6 +45,7 @@ export class Wallet extends React.Component<IHomeProp> {
         const that = this;
         // @ts-ignore
         Axios.all([this.api_findUserBalance(info.data.id), this.api_withdrawWaterList(info.data.id, 0, 50)]).then(
+          // @ts-ignore
           // tslint:disable-next-line: only-arrow-functions
           Axios.spread((findUserBalance, withdrawWaterList) => {
             // 检查并纠正服务端数据格式

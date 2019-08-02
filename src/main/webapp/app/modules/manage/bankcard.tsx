@@ -72,6 +72,7 @@ export class Manage extends React.Component<IManageProp> {
         // Axios.defaults.baseURL = '';
         // @ts-ignore
         Axios.all([this.api_cardlist(), this.api_findUserBankcardList(info.data.id)]).then(
+          // @ts-ignore
           // tslint:disable-next-line: only-arrow-functions
           Axios.spread((cardlist, findUserBankcardList) => {
             // 检查并纠正服务端数据格式
@@ -358,7 +359,8 @@ export class Manage extends React.Component<IManageProp> {
             >
               添加卡片
             </div>
-          ) : state.data.userCardList.length === 0 ? (
+          ) : // @ts-ignore
+          state.data.userCardList.length === 0 ? (
             <div
               style={{
                 textAlign: 'center',
@@ -431,13 +433,20 @@ export class Manage extends React.Component<IManageProp> {
                       type="text"
                       autoComplete="off"
                       name="banknum"
+                      // @ts-ignore
                       minLength="12"
+                      // @ts-ignore
                       maxLength="22"
                       // @ts-ignore
                       value={state.form_banknum}
                       onChange={this.changeBanknum}
                     />
-                    <img id="banklog-viewer" style={{ width: '30px', position: 'absolute', left: '21vw', marginTop: '10px' }} src />
+                    <img
+                      id="banklog-viewer"
+                      style={{ width: '30px', position: 'absolute', left: '21vw', marginTop: '10px' }}
+                      // @ts-ignore
+                      src
+                    />
                   </div>
                 </div>
                 <div style={{ width: 0, height: 0, clear: 'both' }} />

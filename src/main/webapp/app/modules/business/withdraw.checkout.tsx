@@ -220,9 +220,13 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
                 {
                   // @ts-ignore
                   item.bankname
-                  // @ts-ignore
                 }
-                （尾号 {item.banknum}） {item.bankuser}{' '}
+                （尾号{' '}
+                {
+                  // @ts-ignore
+                  item.banknum
+                }
+                ） {item.bankuser}{' '}
               </li>
               <li
                 style={{

@@ -7,6 +7,7 @@ import Title from 'app/modules/public/title';
 import Enddiv from '../../shared/menu/enddiv';
 import './incomeWater.scss';
 // 专用接口请求模块
+// @ts-ignore
 import RequestLoadingWait, { Axios, Api, ShowBodyPlaceholderHtml, httpBuildQuery, DEBUG as RequestDebug } from 'app/request';
 
 export interface IHomeProp extends StateProps, DispatchProps {}
@@ -33,7 +34,7 @@ export class IncomeWater extends React.Component<IHomeProp> {
         // 动态获取最新数 据
         // 默认加载全部数据 navType:all
         this.axiosLoadList('all');
-        //console.log(120, Math.random());
+        // console.log(120, Math.random());
       });
     });
     // this.axiosLoadList('all');
@@ -56,8 +57,7 @@ export class IncomeWater extends React.Component<IHomeProp> {
     Axios.get(url)
       .then(response => {
         this.setState({ loading: false, progressive: false, navType: navType, data: response.data.data });
-
-        //console.log(92, this.state);
+        // console.log(92, this.state);
       })
       .catch(error => {
         window.console.log(error);
@@ -83,6 +83,7 @@ export class IncomeWater extends React.Component<IHomeProp> {
   };
 
   render() {
+    // @ts-ignore
     if (this.state.progressive === true) {
       return (
         <div className="jh-body">
@@ -94,6 +95,7 @@ export class IncomeWater extends React.Component<IHomeProp> {
         </div>
       );
     }
+    // @ts-ignore
     const data = this.state.data;
     const all = data.count ? (data.count.all ? '(' + data.count.all + ')' : '') : '';
     const collection = data.count ? (data.count.collection ? '(' + data.count.collection + ')' : '') : '';
@@ -140,7 +142,10 @@ export class IncomeWater extends React.Component<IHomeProp> {
       <div className="jh-body">
         <Title name="收款账单列表" back="/settings" infoname="我的钱包" infoto="/wallet" />
 
-        <RequestLoadingWait loading={this.state.loading} />
+        <RequestLoadingWait
+          // @ts-ignore
+          loading={this.state.loading}
+        />
         <div className="ws-body-nav ws-hide">
           <ul>
             {// @ts-ignore
