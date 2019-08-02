@@ -104,12 +104,7 @@ export class Manage extends React.Component<IManageProp> {
       Axios.get(this.state.api_debug)
         .then(response => {
           // TODO 平台支持的提现银行
-          response.data.data['list_of_bank_support'] = [
-            { logo: 'icbc', name: '中国工商银行', status: 1 },
-            { logo: 'ccb', name: '中国建设银行', status: 1 },
-            { logo: 'cgb', name: '中国广发银行', status: 1 },
-            { logo: 'cmbc', name: '中国民生银行', status: 1 }
-          ];
+          response.data.data['list_of_bank_support'] = [{ logo: 'icbc', name: '中国工商银行', status: 1 }];
           response.data.data['userCardList'] = response.data.data['cardlist'];
           this.setState({ loading: false, progressive: false, data: response.data.data });
         })
@@ -425,6 +420,8 @@ export class Manage extends React.Component<IManageProp> {
                       style={{
                         width: '100%',
                         height: '35px',
+                        verticalAlign: 'middle',
+                        lineHeight: '35px',
                         border: 'none',
                         borderBottom: '1px solid #ddd',
                         backgroundColor: 'none',
@@ -460,6 +457,8 @@ export class Manage extends React.Component<IManageProp> {
                       style={{
                         width: '100%',
                         height: '35px',
+                        verticalAlign: 'middle',
+                        lineHeight: '35px',
                         border: 'none',
                         borderBottom: '1px solid #ddd',
                         backgroundColor: 'none',
@@ -485,6 +484,8 @@ export class Manage extends React.Component<IManageProp> {
                       style={{
                         width: '100%',
                         height: '35px',
+                        verticalAlign: 'middle',
+                        lineHeight: '35px',
                         border: 'none',
                         borderBottom: '1px solid #ddd',
                         backgroundColor: 'none',
