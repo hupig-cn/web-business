@@ -28,6 +28,7 @@ export class Manage extends React.Component<IManageProp> {
         form_banknum: '',
         form_bankuser: '',
         form_bankmobile: '',
+        form_bankicon: '',
         AUTHORUSER: {}
       },
       Api.tsxBankcard
@@ -103,10 +104,10 @@ export class Manage extends React.Component<IManageProp> {
         .then(response => {
           // TODO 平台支持的提现银行
           response.data.data['list_of_bank_support'] = [
-            { code: 'icbc', name: '中国工商银行', status: 1 },
-            { code: 'ccb', name: '中国建设银行', status: 1 },
-            { code: 'cgb', name: '中国广发银行', status: 1 },
-            { code: 'cmbc', name: '中国民生银行', status: 1 }
+            { logo: 'icbc', name: '中国工商银行', status: 1 },
+            { logo: 'ccb', name: '中国建设银行', status: 1 },
+            { logo: 'cgb', name: '中国广发银行', status: 1 },
+            { logo: 'cmbc', name: '中国民生银行', status: 1 }
           ];
           response.data.data['userCardList'] = response.data.data['cardlist'];
           this.setState({ loading: false, progressive: false, data: response.data.data });
@@ -130,7 +131,9 @@ export class Manage extends React.Component<IManageProp> {
       // @ts-ignore
       bankcard: Utils.numberValidate(state.form_banknum),
       // @ts-ignore
-      bankicon: state.form_bank.trim(),
+      banktype: state.form_bank.trim(),
+      // @ts-ignore
+      bankicon: state.form_bankicon.trim(),
       // @ts-ignore
       realname: state.form_bankuser.trim(),
       // @ts-ignore
@@ -152,6 +155,9 @@ export class Manage extends React.Component<IManageProp> {
       toast.error('卡号错误');
       window.console.log('卡号错误');
     } else {
+      if (post.bankphone === false) {
+        post.bankphone = '';
+      }
       Axios.defaults.headers['Content-Type'] = 'application/json; charset=utf-8';
       // @ts-ignore
       Axios.post(this.state.api_createBankcard, post)
@@ -169,7 +175,8 @@ export class Manage extends React.Component<IManageProp> {
   changeBank = (e: any) => {
     document.getElementById('banklog-viewer').setAttribute('src', '/content/images/banklogo/' + e.target.value + '.png');
     this.setState({
-      form_bank: e.target.value
+      form_bankicon: e.target.value,
+      form_bank: e.target.selectedOptions[0].innerText
     });
     JQ('button[name="sbmit"]').removeAttr('disabled');
   };
@@ -386,7 +393,7 @@ export class Manage extends React.Component<IManageProp> {
                       }}
                       defaultValue="SB000001"
                       // @ts-ignore
-                      value={state.form_bank}
+                      value={state.form_bankicon}
                       onChange={this.changeBank}
                     >
                       <option
@@ -398,7 +405,7 @@ export class Manage extends React.Component<IManageProp> {
                       </option>
                       {// @ts-ignore
                       state.data.list_of_bank_support.map((bank, index) => (
-                        <option key={index} value={bank.code}>
+                        <option key={index} value={bank.logo}>
                           {bank.bankname}
                         </option>
                       ))}
