@@ -61,7 +61,7 @@ export class Manage extends React.Component<IManageProp> {
     return response;
   };
   buildStablePage = () => {
-    // @ts-ignore
+    // tslint:disable-next-line: no-this-assignment
     const that = this;
     // @ts-ignore
     this.props.getSessionRE().then((val: any) => {
@@ -69,9 +69,9 @@ export class Manage extends React.Component<IManageProp> {
         info.config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
         Axios.defaults.headers = info.config.headers;
         // Axios.defaults.baseURL = '';
+        // @ts-ignore
         Axios.all([this.api_cardlist(), this.api_findUserBankcardList(info.data.id)]).then(
           // tslint:disable-next-line: only-arrow-functions
-          // @ts-ignore
           Axios.spread((cardlist, findUserBankcardList) => {
             // 检查并纠正服务端数据格式
             cardlist.data = Api.responseParse(cardlist.data, []);
@@ -125,30 +125,39 @@ export class Manage extends React.Component<IManageProp> {
     e.preventDefault();
     const state = this.state;
     const post = {
+      // @ts-ignore
       bankphone: Utils.mobileValidate(state.form_bankmobile),
+      // @ts-ignore
       bankcard: Utils.numberValidate(state.form_banknum),
+      // @ts-ignore
       bankicon: state.form_bank.trim(),
+      // @ts-ignore
       realname: state.form_bankuser.trim(),
+      // @ts-ignore
       userid: state.AUTHORUSER.data.id || 0
     };
 
     if (post.userid <= 0) {
       toast.error('操作授权失败,请尝试重新登录');
       window.console.log('用户授权失败');
+      // @ts-ignore
     } else if (post.bankcode === '') {
       toast.error('开户姓名错误');
       window.console.log('开户姓名错误');
+      // @ts-ignore
     } else if (post.bankphone === false && state.form_bankmobile.length > 0) {
       toast.error('手机号码错误');
       window.console.log('手机号码错误');
-    } else if (post.bankcard === false) {
+    } else if (post.bankcard === false || (post.bankcard.length > 20 || post.bankcard.length < 12)) {
       toast.error('卡号错误');
       window.console.log('卡号错误');
     } else {
       Axios.defaults.headers['Content-Type'] = 'application/json; charset=utf-8';
+      // @ts-ignore
       Axios.post(this.state.api_createBankcard, post)
         .then(response => {
           toast.success('绑定成功');
+          JQ('button[type="submit"]').remove();
         })
         .catch(error => {
           toast.error('绑卡失败，请稍后尝试');
@@ -158,6 +167,7 @@ export class Manage extends React.Component<IManageProp> {
   };
 
   changeBank = (e: any) => {
+    document.getElementById('banklog-viewer').setAttribute('src', '/content/images/banklogo/' + e.target.value + '.png');
     this.setState({
       form_bank: e.target.value
     });
@@ -238,7 +248,11 @@ export class Manage extends React.Component<IManageProp> {
             float: 'left'
           }}
         >
-          <img src={'./content/images/' + item.logo + '.png'} style={{ width: '50%' }} />
+          <img
+            // @ts-ignore
+            src={'./content/images/banklogo/' + item.logo + '.png'}
+            style={{ width: '50%' }}
+          />
         </div>
 
         <div
@@ -252,9 +266,15 @@ export class Manage extends React.Component<IManageProp> {
             paddingTop: '10px'
           }}
         >
-          {item.bankname}
+          {
+            // @ts-ignore
+            item.bankname
+          }
           <br />
-          {item.bankuser}
+          {
+            // @ts-ignore
+            item.bankuser
+          }
         </div>
 
         <div
@@ -267,7 +287,9 @@ export class Manage extends React.Component<IManageProp> {
             paddingRight: '20px'
           }}
         >
-          **** {item.banknum}
+          {'**** '}
+          {// @ts-ignore
+          item.banknum.substr(-4)}
         </div>
       </div>
     ));
@@ -299,13 +321,19 @@ export class Manage extends React.Component<IManageProp> {
                 display: 'block'
               }}
             >
-              我的银行卡 {state.data.userCardList.length} / 4
+              {'我的银行卡 '}
+              {
+                // @ts-ignore
+                state.data.userCardList.length
+              }
+              {' / 4'}
             </div>
           ) : (
             ''
           )}
           {userCardList}
-          {state.data.userCardList.length > 0 ? (
+          {// @ts-ignore
+          state.data.userCardList.length > 0 && state.data.userCardList.length < 4 ? (
             <div
               style={{
                 width: '100vw',
@@ -319,7 +347,7 @@ export class Manage extends React.Component<IManageProp> {
             >
               添加卡片
             </div>
-          ) : (
+          ) : state.data.userCardList.length === 0 ? (
             <div
               style={{
                 textAlign: 'center',
@@ -330,6 +358,8 @@ export class Manage extends React.Component<IManageProp> {
             >
               您还没有绑定银行卡 ?
             </div>
+          ) : (
+            ' '
           )}{' '}
           {// @ts-ignore
           state.data.userCardList.length < 4 ? (
@@ -351,6 +381,7 @@ export class Manage extends React.Component<IManageProp> {
                         backgroundColor: '#fff'
                       }}
                       defaultValue="SB000001"
+                      // @ts-ignore
                       value={state.form_bank}
                       onChange={this.changeBank}
                     >
@@ -380,14 +411,18 @@ export class Manage extends React.Component<IManageProp> {
                         border: 'none',
                         borderBottom: '1px solid #ddd',
                         backgroundColor: 'none',
-                        textIndent: '10px'
+                        textIndent: '40px'
                       }}
                       type="text"
                       autoComplete="off"
                       name="banknum"
+                      minLength="12"
+                      maxLength="22"
+                      // @ts-ignore
                       value={state.form_banknum}
                       onChange={this.changeBanknum}
                     />
+                    <img id="banklog-viewer" style={{ width: '30px', position: 'absolute', left: '21vw', marginTop: '10px' }} src />
                   </div>
                 </div>
                 <div style={{ width: 0, height: 0, clear: 'both' }} />
@@ -409,6 +444,7 @@ export class Manage extends React.Component<IManageProp> {
                       type="text"
                       autoComplete="off"
                       name="bankuser"
+                      // @ts-ignore
                       value={state.form_bankuser}
                       onChange={this.changeBankUser}
                     />
@@ -433,6 +469,7 @@ export class Manage extends React.Component<IManageProp> {
                       type="text"
                       autoComplete="off"
                       name="bankmobile"
+                      // @ts-ignore
                       value={state.form_bankmobile}
                       onChange={this.changeBankMobile}
                     />

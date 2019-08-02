@@ -21,7 +21,9 @@ a {
     box-sizing: border-box;
   }
 }
-
+.ws-hide {
+  display: none !important;
+}
 .app-container {
   box-sizing: border-box;
   .view-container {

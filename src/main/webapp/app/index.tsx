@@ -20,7 +20,10 @@ const rootEl = document.getElementById('root');
 const render = Component =>
   ReactDOM.render(
     <ErrorBoundary>
-      <Provider store={store}>
+      <Provider
+        // @ts-ignore
+        store={store}
+      >
         <div>
           <Component />
         </div>

@@ -47,11 +47,13 @@ export class Personal extends React.Component<IPersonalProp> {
         info.config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
         Axios.defaults.headers = info.config.headers;
         // Axios.defaults.baseURL = '';
+        // tslint:disable-next-line: no-this-assignment
         const that = this;
+        // @ts-ignore
         Axios.all([this.getSomeOrderInfo(info.data.id), this.getShopInfo(info.data.id)]).then(
-          // tslint:disable-next-line: only-arrow-functions
           // @ts-ignore
-          Axios.spread(function(orderInfo, shopInfo) {
+          // tslint:disable-next-line: only-arrow-functions
+          Axios.spread((orderInfo, shopInfo) => {
             // 检查并纠正服务端数据格式
             orderInfo.data = Api.responseParse(orderInfo.data, {});
             shopInfo.data = Api.responseParse(shopInfo.data, {});

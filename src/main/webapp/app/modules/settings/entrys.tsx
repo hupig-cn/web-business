@@ -44,7 +44,7 @@ export default function ListDividers(props) {
       </ListItem>
       <Divider />
 
-      <Link unto="/wallet">
+      <Link to="/settings">
         <ListItem button>
           <ListItemText primary="提现账单记录" />
           <span> &gt; </span>
@@ -52,7 +52,7 @@ export default function ListDividers(props) {
       </Link>
       <Divider />
 
-      <Link unto="/manage/incomeWater">
+      <Link to="/manage/incomeWater">
         <ListItem button>
           <ListItemText primary="账户流水记录" />
           <span> &gt; </span>

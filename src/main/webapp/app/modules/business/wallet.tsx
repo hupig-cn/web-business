@@ -41,11 +41,12 @@ export class Wallet extends React.Component<IHomeProp> {
         info.config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
         Axios.defaults.headers = info.config.headers;
         // Axios.defaults.baseURL = '';
+        // tslint:disable-next-line: no-this-assignment
         const that = this;
+        // @ts-ignore
         Axios.all([this.api_findUserBalance(info.data.id), this.api_withdrawWaterList(info.data.id, 0, 50)]).then(
           // tslint:disable-next-line: only-arrow-functions
-          // @ts-ignore
-          Axios.spread(function(findUserBalance, withdrawWaterList) {
+          Axios.spread((findUserBalance, withdrawWaterList) => {
             // 检查并纠正服务端数据格式
             findUserBalance.data = Api.responseParse(findUserBalance.data, {});
             withdrawWaterList.data = Api.responseParse(withdrawWaterList.data, []);
@@ -101,7 +102,11 @@ export class Wallet extends React.Component<IHomeProp> {
 
         {/* <RequestLoadingWait loading={ this.state.loading } /> */}
 
-        <WithDraWater waterlist={this.state.data.list} account={this.state.data.account} />
+        <WithDraWater
+          // @ts-ignore
+          waterlist={this.state.data.list}
+          account={this.state.data.account}
+        />
 
         <Enddiv />
       </div>

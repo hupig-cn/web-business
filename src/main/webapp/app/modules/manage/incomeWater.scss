@@ -1,0 +1,102 @@
+div.jh-body {
+  ul,
+  li {
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+  }
+}
+div.ws-body-nav {
+  height: 60px;
+  background: #169bd5;
+  ul li {
+    float: left;
+    font-size: 0.95rem;
+    width: 33vw;
+    text-align: center;
+    height: 60px;
+    line-height: 60px;
+    cursor: pointer;
+    background: #fff;
+    &.active {
+      color: #169bd5;
+      cursor: auto !important;
+      font-weight: bold;
+      height: 58px;
+    }
+    &:last-child {
+      width: 34vw;
+      &::after {
+        clear: both;
+      }
+    }
+  }
+}
+div.ws-body-list {
+  li {
+    height: 60px;
+    overflow: hidden;
+    line-height: 60px;
+    border-bottom: 1px dashed #ecebeb;
+    cursor: pointer;
+    // 标准列
+    & > div {
+      font-size: 0.9rem;
+      overflow: hidden;
+      height: 60px;
+      line-height: 50px;
+      float: left;
+      &.info {
+        width: 70vw;
+        // background: #009900;
+        padding-left: 15px;
+        text-align: left;
+        & > div {
+          width: 100%;
+          float: left;
+          line-height: 40px;
+          height: 25px;
+          &:last-child {
+            font-size: 0.8rem;
+            color: #6f6f6f;
+          }
+        }
+      }
+      &.price {
+        width: 30vw;
+        padding-right: 15px;
+        // background: #ff0000;
+        text-align: right;
+      }
+      &.price::before {
+        content: '';
+      }
+      &.price[type='type1'] {
+        color: #ff0000;
+        &::before {
+          content: '+';
+        }
+      }
+    }
+    &:last-child {
+      border: none;
+    }
+    //月标题列
+    &.month-nav {
+      height: 40px;
+      font-weight: bold;
+      background: #eee;
+      .price::before {
+        content: '总收款：-';
+      }
+      .price[type='type1'] {
+        color: #ff0000;
+        &::before {
+          content: '总收款：+';
+        }
+      }
+    }
+  }
+}
+@media only screen and (max-width: 768px) {
+}

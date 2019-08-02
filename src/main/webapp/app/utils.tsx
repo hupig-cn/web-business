@@ -4,7 +4,8 @@ class UTILS {
   beautifulPrice = false;
   pricePointLength = 3;
 }
-//手机号码
+// 手机号码
+// @ts-ignore
 UTILS.prototype.mobileValidate = (s: string) => {
   // const S = (' ' + s).replace(/\ /g, '');
   const S = (' ' + s).trim();
@@ -13,6 +14,7 @@ UTILS.prototype.mobileValidate = (s: string) => {
   }
   return false;
 };
+// @ts-ignore
 UTILS.prototype.numberValidate = (s: string) => {
   // const S = (' ' + s).replace(/\ /g, '');
   const S = (' ' + s).trim();
@@ -21,6 +23,7 @@ UTILS.prototype.numberValidate = (s: string) => {
   }
   return false;
 };
+// @ts-ignore
 UTILS.prototype.priceValidate = (s: string) => {
   const S = parseInt((' ' + s).trim(), 10);
   if (S >= 0) {
@@ -28,7 +31,9 @@ UTILS.prototype.priceValidate = (s: string) => {
   }
   return false;
 };
+// @ts-ignore
 UTILS.prototype.beautifulPriceText = (s: string) => {
+  // tslint:disable-next-line: no-invalid-this
   if (this.beautifulPrice) {
     return parseInt(s.replace(/\,/g, ''), 10);
   }

@@ -28,10 +28,9 @@ export class Manage extends React.Component<IManageProp> {
     return (
       <div className="jh-personal">
         {/* 同步请求 等待视图 */}
+        // @ts-ignore
         <RequestLoadingWait loading={this.state.loading} />
-
         <Title name="设置中心" back="/settings" />
-
         <div ws-container-id="main">
           <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
             <li style={{ margin: 0, padding: 0, listStyle: 'none', height: '50px', lineHeight: '50px', borderBottom: '1px solid #eee' }}>

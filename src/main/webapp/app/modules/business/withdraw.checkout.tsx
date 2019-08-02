@@ -40,7 +40,7 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
 
   // TODO 上拉加载组件
   buildStablePage = () => {
-    // @ts-ignore
+    // tslint:disable-next-line: no-this-assignment
     const that = this;
     // @ts-ignore
     this.props.getSessionRE().then((val: any) => {
@@ -48,10 +48,11 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
         info.config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
         Axios.defaults.headers = info.config.headers;
         // Axios.defaults.baseURL = '';
+        // @ts-ignore
         Axios.all([this.api_findUserBalance(info.data.id), this.api_findAllUserBankCard(info.data.id)]).then(
-          // tslint:disable-next-line: only-arrow-functions
           // @ts-ignore
-          Axios.spread(function(findUserBalance, findAllUserBankCard) {
+          // tslint:disable-next-line: only-arrow-functions
+          Axios.spread((findUserBalance, findAllUserBankCard) => {
             // 检查并纠正服务端数据格式
             findAllUserBankCard.data = Api.responseParse(findAllUserBankCard.data, []);
             findUserBalance.data = Api.responseParse(findUserBalance.data, {});
@@ -94,13 +95,17 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
   handelSubmit = (e: any) => {
     e.preventDefault();
     const state = this.state;
+    // @ts-ignore
     const ab_balance = parseFloat(state.data.account.availableBalance.replace(/\ |,/g, '')) * 1;
 
     const post = {
+      // @ts-ignore
       bankcardid: Utils.numberValidate(state.bankcard),
       gatheringway: 1, // TODO 目前只开银行卡  1:银行卡/ 2:微信/ 3:支付宝
+      // @ts-ignore
       withdrawalamount: Utils.priceValidate(state.amount),
-      userid: state.AUTHORUSER.data.id || 0
+      // @ts-ignore
+      userid: state.AUTHORUSER.data.id || 0 // 当前登录用户ID
     };
 
     if (post.userid <= 0) {
@@ -122,8 +127,9 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
       // @ts-ignore
       Axios.post(this.state.api_insertWithdraw, post)
         .then(response => {
+          JQ('input[type="submit"]').attr('disabled', 'disabled');
           toast.success('已申请成功，请等待审核');
-          this.forceUpdate();
+          JQ('input[type="submit"]').remove();
         })
         .catch(error => {
           toast.error('提现申请失败，请稍后尝试');
@@ -136,45 +142,46 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
   // 锁定提交
   lockSbmitBtn = (lock: boolean) => {
     lock
-      ? JQ('button[type="submit"]')
+      ? JQ('input[type="submit"]')
           .css('background', 'auto')
           .attr('disabled', 'disabled')
-      : JQ('button[type="submit"]')
+      : JQ('input[type="submit"]')
           .css('background', '#1976d2')
           .removeAttr('disabled');
   };
 
   changeBank = (e: any) => {
     this.setState({
-      bankcard: e.target.value
+      bankcard: e.target.value,
+      lockSbmitBtn: false
     });
   };
 
   inputAmount = (e: any) => {
+    // @ts-ignore
     const value = Utils.priceValidate(e.target.value);
+    // @ts-ignore
     const ab_balance = parseFloat(this.state.data.account.availableBalance.replace(/\ |,/g, '')) * 1;
+    // tslint:disable-next-line: no-console
     console.log(typeof value, value);
-    // 提现金额输入错误或超出可提现金额边界
-    if (value === false || value > ab_balance) {
-      // this.lockSbmitBtn(true);
-      return this.state.amount;
-    }
-    this.lockSbmitBtn(false);
 
     this.setState({
-      amount: value > 0 ? value : 0
+      amount: value > 0 ? value : 0,
+      lockSbmitBtn: false
     });
-    this.lockSbmitBtn(false);
   };
 
   render() {
+    // @ts-ignore
     const data = this.state.data;
     const bankList = !data.bank
       ? null
       : data.bank.map((item: object) => (
           <label
             onClick={this.changeBank}
+            // @ts-ignore
             htmlFor={'bankcard_' + item.id}
+            // @ts-ignore
             key={item.id}
             style={{
               width: '100vw',
@@ -201,7 +208,7 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
                   float: 'left',
                   margin: 0,
                   padding: 0,
-                  heigth: '50px',
+                  height: '50px',
                   lineHeight: '50px',
                   textIndent: '20px',
                   textAlign: 'left',
@@ -210,14 +217,18 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
                   overflow: 'hidden'
                 }}
               >
-                {item.bankname}（尾号 {item.banknum}） {item.bankuser}{' '}
+                {
+                  // @ts-ignore
+                  item.bankname
+                }
+                （尾号 {item.banknum}） {item.bankuser}{' '}
               </li>
               <li
                 style={{
                   listStyle: 'none',
-                  margin: 0,
-                  padding: 0,
-                  heigth: '50px',
+                  margin: '0px !important',
+                  padding: '0px !important',
+                  height: '50px',
                   lineHeight: '50px',
                   textAlign: 'right',
                   width: '15%',
@@ -225,11 +236,19 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
                   float: 'right'
                 }}
               >
-                <input id={'bankcard_' + item.id} type="radio" name="bankcard" value={item.id} />
+                <input
+                  // @ts-ignore
+                  id={'bankcard_' + item.id}
+                  type="radio"
+                  name="bankcard"
+                  value={item.id}
+                  style={{ margin: '10px 20px' }}
+                />
               </li>
             </ul>
           </label>
         ));
+    // @ts-ignore
     return this.state.progressive === true ? (
       <div className="jh-body">
         <Title name="申请提现" back="/wallet" />
@@ -293,7 +312,7 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
               <span
                 style={{
                   width: '100vw',
-                  fontSize: '0.8',
+                  fontSize: '0.8rem',
                   display: 'block',
                   textAlign: 'left'
                 }}
@@ -306,6 +325,7 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
                 value=""
                 placeholder="￥"
                 autoComplete="off"
+                // @ts-ignore
                 value={this.state.amount}
                 onChange={this.inputAmount}
                 style={{
@@ -321,7 +341,7 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
               <span
                 style={{
                   width: '100vw',
-                  fontSize: 0.8,
+                  fontSize: '0.8rem',
                   display: 'block',
                   textAlign: 'left',
                   height: '40px',
@@ -341,22 +361,43 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
                 元
               </span>
             </div>
-            <input
-              type="submit"
-              name="sbmit"
-              disabled
-              style={{
-                width: '80vw',
-                height: '40px',
-                margin: '0 auto',
-                color: '#fff',
-                textAlign: 'center',
-                marginTop: '50px',
-                border: 'none',
-                borderRadius: '20px'
-              }}
-              value="提交申请"
-            />
+
+            {// @ts-ignore
+            this.state.lockSbmitBtn ? (
+              <input
+                type="submit"
+                name="sbmit"
+                disabled
+                style={{
+                  width: '80vw',
+                  height: '40px',
+                  margin: '0 auto',
+                  color: '#fff',
+                  textAlign: 'center',
+                  marginTop: '50px',
+                  border: 'none',
+                  borderRadius: '20px'
+                }}
+                value="提交申请"
+              />
+            ) : (
+              <input
+                type="submit"
+                name="sbmit"
+                style={{
+                  width: '80vw',
+                  height: '40px',
+                  margin: '0 auto',
+                  color: '#fff',
+                  textAlign: 'center',
+                  marginTop: '50px',
+                  border: 'none',
+                  borderRadius: '20px',
+                  backgroundColor: '#1976d2'
+                }}
+                value="提交申请"
+              />
+            )}
           </form>
         </div>
         <Enddiv />

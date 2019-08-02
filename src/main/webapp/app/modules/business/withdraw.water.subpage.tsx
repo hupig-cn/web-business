@@ -1,12 +1,19 @@
 import React from 'react';
+// tslint:disable-next-line: no-submodule-imports
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+// tslint:disable-next-line: no-submodule-imports
 import List from '@material-ui/core/List';
+// tslint:disable-next-line: no-submodule-imports
 import ListItem from '@material-ui/core/ListItem';
+// tslint:disable-next-line: no-submodule-imports
 import ListItemText from '@material-ui/core/ListItemText';
+// tslint:disable-next-line: no-submodule-imports
 import Divider from '@material-ui/core/Divider';
+// tslint:disable-next-line: no-submodule-imports
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-
+// tslint:disable-next-line: no-submodule-imports
 import Paper from '@material-ui/core/Paper';
+// tslint:disable-next-line: no-submodule-imports
 import Typography from '@material-ui/core/Typography';
 
 // 专用接口请求模块
@@ -36,6 +43,7 @@ export default function ListDividers(props) {
   // ['-', '处理中', '成功', '失败'][props.info.status]
   // ['-', '银行卡', '微信', '支付宝'][props.info.type]}
 
+  // tslint:disable-next-line: one-variable-per-declaration
   let ma, mb;
   if (props.info.type === '1') {
     ma = (
@@ -65,7 +73,7 @@ export default function ListDividers(props) {
           {props.info.bankuser && props.info.bankaccount ? (
             <ListItemSecondaryAction>
               {' '}
-              {props.info.bankuser}（**** {props.info.bankaccount}）{' '}
+              {props.info.bankuser}（**** {props.info.bankaccount.substr(-4)}）
             </ListItemSecondaryAction>
           ) : (
             <ListItemSecondaryAction> - </ListItemSecondaryAction>

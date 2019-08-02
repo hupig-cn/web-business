@@ -11,6 +11,8 @@ const APP_BODY_FILL_WAIT = true;
 // const APP_SERVER_API_URL = 'http://139.196.100.121/yjfapi/web-business'; // SERVER_API_URL
 const APP_SERVER_API_URL = 'services';
 const DEBUG_APP_SERVER_API_URL = 'http://wskj.tpddns.cn:32767/api/web-business'; // SERVER_API_URL
+// 接口环境：布尔 true 或 false
+export const DEBUG = false;
 
 // 各接口配置
 export const Api = {
@@ -105,24 +107,32 @@ export const Api = {
     error: null,
     progressive: APP_BODY_FILL_WAIT
   },
+  tsxIncomeWater: {
+    api_debug: '/incomeWater.php',
 
+    // 商家查询收付款流水
+    api_incomeWaterQuery: '/basic/api/receiptpay/findMerchantProfitInfo/{userid}&{startPage}&{pageSize}',
+    data: {},
+    loading: APP_BODY_HOLD_WAIT,
+    error: null,
+    progressive: APP_BODY_FILL_WAIT
+  },
   responseParse: (response: object, dataType: object) => {
     const objv = obj => Object.prototype.toString.call(obj) === '[object Object]';
     const arrv = arr => Object.prototype.toString.call(arr) === '[object Array]';
 
+    // @ts-ignore
     if (response.data === undefined || response.data === null || response.data === '') {
       response['data'] = dataType;
     }
+    // @ts-ignore
     if (arrv(response.data) && response.data['0'] !== undefined && objv(dataType)) {
+      // @ts-ignore
       response['data'] = response.data['0'];
     }
     return response;
   }
 };
-
-// 接口环境：布尔 true 或 false
-export const DEBUG = false;
-
 const instance = axios.create({
   // 当创建实例的时候配置默认配置
   xsrfCookieName: 'XSRF-TOKEN',

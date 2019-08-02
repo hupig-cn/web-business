@@ -49,10 +49,12 @@ export class Personal extends React.Component<IPersonalProp> {
         info.config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
         Axios.defaults.headers = info.config.headers;
         // Axios.defaults.baseURL = '';
+        // tslint:disable-next-line: no-this-assignment
         const that = this;
+        // @ts-ignore
         Axios.all([this.getShopBalance(info.data.id), this.getShopInfo(info.data.id), this.getProfitInfo(info.data.id)]).then(
-          // tslint:disable-next-line: only-arrow-functions
           // @ts-ignore
+          // tslint:disable-next-line: only-arrow-functions
           Axios.spread(function(ShopBalance, ShopInfo, ProfitInfo) {
             // 检查并纠正服务端数据格式
             ShopBalance.data = Api.responseParse(ShopBalance.data, {});
@@ -115,11 +117,15 @@ export class Personal extends React.Component<IPersonalProp> {
   }
 
   render() {
+    // @ts-ignore
     const repos = this.state.data;
     return (
       <div className="jh-personal">
         {/* 同步请求 等待视图 */}
-        <RequestLoadingWait loading={this.state.loading} />
+        <RequestLoadingWait
+          // @ts-ignore
+          loading={this.state.loading}
+        />
 
         <Shop shop={repos.shop} />
         <Bankcard bankcard={repos.bankcard} />
