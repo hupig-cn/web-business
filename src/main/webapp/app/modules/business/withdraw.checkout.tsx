@@ -220,6 +220,7 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
                 {
                   // @ts-ignore
                   item.bankname
+                  // @ts-ignore
                 }
                 （尾号 {item.banknum}） {item.bankuser}{' '}
               </li>
@@ -241,6 +242,7 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
                   id={'bankcard_' + item.id}
                   type="radio"
                   name="bankcard"
+                  // @ts-ignore
                   value={item.id}
                   style={{ margin: '10px 20px' }}
                 />

@@ -301,14 +301,18 @@ export class Manage extends React.Component<IManageProp> {
       <div className="jh-personal">
         <Title name="银行卡" back="/manage" />
 
-        {/* 同步请求 等待视图 */}
         {/* <RequestLoadingWait loading={this.state.loading} /> */}
 
         <div ws-container-id="main">
           <div style={{ height: '20px', width: '100%' }}>
             <div style={{ display: 'none' }}>
               <Link to="">绑定</Link>
-              <Link to="">解绑</Link>
+              <Link
+                // @ts-ignore
+                to=""
+              >
+                解绑
+              </Link>
             </div>
           </div>
           {// @ts-ignore
@@ -385,7 +389,11 @@ export class Manage extends React.Component<IManageProp> {
                       value={state.form_bank}
                       onChange={this.changeBank}
                     >
-                      <option key="SB000001" value="">
+                      <option
+                        key="SB000001"
+                        value=""
+                        // @ts-ignore
+                      >
                         请选择
                       </option>
                       {// @ts-ignore
