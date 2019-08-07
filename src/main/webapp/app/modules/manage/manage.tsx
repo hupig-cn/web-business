@@ -80,7 +80,7 @@ export class Manage extends React.Component<IManageProp> {
                   textAlign: 'right'
                 }}
               >
-                银行卡
+                提现账号
               </div>
 
               <div style={{ width: '75vw', float: 'right' }}>
@@ -93,9 +93,9 @@ export class Manage extends React.Component<IManageProp> {
                     color: '#ddd'
                   }}
                 >
-                  绑定 解绑银行账户
+                  绑定 解绑移动收款、银行账户
                 </div>
-                <Link to="/manage/bankcard">
+                <Link to="/manage/withdrawAccountManage">
                   <div
                     style={{
                       width: '25vw',

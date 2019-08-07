@@ -1,10 +1,7 @@
 import React from 'react';
 import Business from 'app/modules/business/business';
-// const Routes = () => <Business />;
-// export default Routes;
 
 import { Switch } from 'react-router-dom';
-
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import PageNotFound from 'app/shared/error/page-not-found';
 
@@ -19,9 +16,11 @@ import Wallet from 'app/modules/business/wallet';
 // 提现进度查看
 import WithdrawWater from 'app/modules/business/withdraw.water';
 // 申请提现
-import withdrawCheckout from 'app/modules/business/withdraw.checkout';
-// 银行卡管理
-import Manage_bankcard from 'app/modules/manage/bankcard';
+import WithdrawCheckout from 'app/modules/business/withdraw.checkout';
+// 提现账号管理
+import WithdrawAccountManage from 'app/modules/manage/withdrawAccountManage';
+// 绑定微信、支付宝
+import BindAlipayWeixinAccount from 'app/modules/manage/bindWithdrawAccount';
 // 商家收入流水
 import IncomeWaterList from 'app/modules/manage/incomeWater';
 
@@ -32,8 +31,9 @@ const Routes = () => (
       <ErrorBoundaryRoute path="/settings" component={Settings} />
       <ErrorBoundaryRoute path="/wallet" component={Wallet} />
       <ErrorBoundaryRoute path="/withdrawDetail" component={WithdrawWater} />
-      <ErrorBoundaryRoute path="/withdrawCheckout" component={withdrawCheckout} />
-      <ErrorBoundaryRoute path="/manage/bankcard" component={Manage_bankcard} />
+      <ErrorBoundaryRoute path="/withdrawCheckout" component={WithdrawCheckout} />
+      <ErrorBoundaryRoute path="/manage/withdrawAccountManage" component={WithdrawAccountManage} />
+      <ErrorBoundaryRoute path="/manage/bindWithdrawAccount" component={BindAlipayWeixinAccount} />
       <ErrorBoundaryRoute path="/manage/incomeWater" component={IncomeWaterList} />
       <ErrorBoundaryRoute path="/manage" exact component={Manage} />
       {/* <ErrorBoundaryRoute path="/bankcard" component={Bankcard} /> */}

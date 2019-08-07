@@ -102,8 +102,8 @@ export class IncomeWater extends React.Component<IHomeProp> {
     const payment = data.count ? (data.count.payment ? '(' + data.count.payment + ')' : '') : '';
     // const other = data.count ? (data.count.other ? '(' + data.count.other + ')' : '') : '';
     const list = data.map((item: object, index: number) => (
-      <div>
-        <li key={'obj_' + index} className="month-nav">
+      <div key={'obj_' + index}>
+        <li className="month-nav">
           <div className="info">
             <div>
               {

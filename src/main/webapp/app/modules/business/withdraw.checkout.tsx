@@ -15,6 +15,7 @@ import JQ from 'jquery';
 // 专用接口请求模块
 import { Axios, Api, ShowBodyPlaceholderHtml, DEBUG as RequestDebug } from 'app/request';
 import Utils from 'app/utils';
+import './business.scss';
 
 export interface IWithdrwaProp extends StateProps, DispatchProps, RouteComponentProps<{}> {}
 
@@ -22,7 +23,12 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
   constructor(props) {
     super(props);
     // 初始化接口数据结构
-    this.state = JQ.extend(true, {}, Api.tsxWithdraw.data, Api.tsxWithdraw);
+    this.state = JQ.extend(true, { bankcard: '' }, Api.tsxWithdraw.data, Api.tsxWithdraw);
+
+    // 监听点击项，执行高亮样式
+    let __backcard_ClickListen__;
+    // 屏蔽烦人的提示： Identifier '__backcard_ClickListen__' is never reassigned; use 'const' instead of 'let'.
+    __backcard_ClickListen__ = 0;
   }
 
   // 查询用户余额
@@ -38,6 +44,15 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
     return response;
   };
 
+  api_getLocalConfig = () => {
+    // TODO 注意此处路径层级
+    // Axios 默认配置了根路径为：www.xxx.com/services
+    // 故此处使用相对路径来拼接真实路径，最终为：www.xxx.com/content/doc/config.json
+    // @ts-ignore
+    const response = Axios.get('../content/doc/config.json');
+    return response;
+  };
+
   // TODO 上拉加载组件
   buildStablePage = () => {
     // tslint:disable-next-line: no-this-assignment
@@ -49,15 +64,15 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
         Axios.defaults.headers = info.config.headers;
         // Axios.defaults.baseURL = '';
         // @ts-ignore
-        Axios.all([this.api_findUserBalance(info.data.id), this.api_findAllUserBankCard(info.data.id)]).then(
+        Axios.all([this.api_findUserBalance(info.data.id), this.api_findAllUserBankCard(info.data.id), this.api_getLocalConfig()]).then(
           // @ts-ignore
           // tslint:disable-next-line: only-arrow-functions
-          Axios.spread((findUserBalance, findAllUserBankCard) => {
+          Axios.spread((findUserBalance, findAllUserBankCard, localConfig) => {
             // 检查并纠正服务端数据格式
             findAllUserBankCard.data = Api.responseParse(findAllUserBankCard.data, []);
             findUserBalance.data = Api.responseParse(findUserBalance.data, {});
 
-            window.console.debug(findAllUserBankCard.data.data, findUserBalance.data.data);
+            window.console.debug(findAllUserBankCard.data.data, findUserBalance.data.data, localConfig);
 
             that.setState({
               AUTHORUSER: info,
@@ -65,7 +80,8 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
               progressive: false,
               data: {
                 account: findUserBalance.data.data,
-                bank: findAllUserBankCard.data.data
+                bank: findAllUserBankCard.data.data,
+                __local_config__: localConfig.data
               }
             });
           })
@@ -79,13 +95,14 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
     if (RequestDebug === true) {
       // 动态获取最新数据
       // @ts-ignore
-      Axios.get(this.state.api_debug)
-        .then(response => {
-          this.setState({ loading: false, progressive: false, data: response.data.data });
+      Axios.all([Axios.get(this.state.api_debug), this.api_getLocalConfig()]).then(
+        // @ts-ignore
+        // tslint:disable-next-line: only-arrow-functions
+        Axios.spread((debug_response, localConfig) => {
+          debug_response['data']['data']['__local_config__'] = localConfig.data.data;
+          this.setState({ loading: false, progressive: false, data: debug_response.data.data });
         })
-        .catch(error => {
-          window.console.log(error);
-        });
+      );
     } else {
       // @ts-ignore
       this.buildStablePage();
@@ -95,25 +112,41 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
   handelSubmit = (e: any) => {
     e.preventDefault();
     const state = this.state;
+    // 验证可提现金额
     // @ts-ignore
     const ab_balance = parseFloat(state.data.account.availableBalance.replace(/\ |,/g, '')) * 1;
 
-    const post = {
+    let post;
+    post = {
       // @ts-ignore
       bankcardid: Utils.numberValidate(state.bankcard),
-      gatheringway: 1, // TODO 目前只开银行卡  1:银行卡/ 2:微信/ 3:支付宝
+      // 1:银行卡/ 2:微信/ 3:支付宝
+      gatheringway: 1,
+      __doc_gatheringway__: '前端预定义的收款方式： 1:银行卡/ 2:微信/ 3:支付宝',
       // @ts-ignore
       withdrawalamount: Utils.priceValidate(state.amount),
       // @ts-ignore
-      userid: state.AUTHORUSER.data.id || 0 // 当前登录用户ID
+      userid: state.AUTHORUSER.data.id || 0, // 当前登录用户ID
+      alipay: '',
+      weixin: ''
     };
+
+    // 处理微信、支付宝收款选择器
+    if (state.bankcard.indexOf('weixin_') === 0) {
+      post['gatheringway'] = 2;
+      post['weixin'] = state.bankcard.replace(/weixin_|\ /g, '');
+    }
+    if (state.bankcard.indexOf('alipay_') === 0) {
+      post['gatheringway'] = 3;
+      post['alipay'] = state.bankcard.replace(/alipay_|\ /g, '');
+    }
 
     if (post.userid <= 0) {
       toast.error('操作授权失败,请尝试重新登录');
       window.console.log('用户授权失败');
-    } else if (post.bankcardid <= 0 || !post.bankcardid) {
-      toast.info('请选择收款银行卡');
-      window.console.log('请选择收款银行卡');
+    } else if ((post.bankcardid <= 0 || !post.bankcardid) && post.alipay === '' && post.weixin === '') {
+      toast.info('请选择收款账户');
+      window.console.log('请选择收款账户');
     } else if (post.withdrawalamount <= 0 || isNaN(post.withdrawalamount)) {
       toast.info('提现金额无效');
       window.console.log('提现金额无效');
@@ -151,6 +184,7 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
   };
 
   changeBank = (e: any) => {
+    this.__backcard_ClickListen__ = e.target.value;
     this.setState({
       bankcard: e.target.value,
       lockSbmitBtn: false
@@ -163,7 +197,7 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
     // @ts-ignore
     const ab_balance = parseFloat(this.state.data.account.availableBalance.replace(/\ |,/g, '')) * 1;
     // tslint:disable-next-line: no-console
-    console.log(typeof value, value);
+    // console.log(typeof value, value);
 
     this.setState({
       amount: value > 0 ? value : 0,
@@ -174,86 +208,89 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
   render() {
     // @ts-ignore
     const data = this.state.data;
-    const bankList = !data.bank
-      ? null
-      : data.bank.map((item: object) => (
-          <label
-            onClick={this.changeBank}
-            // @ts-ignore
-            htmlFor={'bankcard_' + item.id}
-            // @ts-ignore
-            key={item.id}
-            style={{
-              width: '100vw',
-              display: 'inline-block',
-              margin: 0,
-              padding: 0,
-              height: '44px'
-            }}
-          >
-            <ul
-              style={{
-                width: '100vw',
-                listStyle: 'none',
-                margin: 0,
-                padding: 0,
-                height: '50px',
-                backgroundColor: '#eee',
-                borderBottom: '1px solid #ddd'
-              }}
-            >
-              <li
-                style={{
-                  listStyle: 'none',
-                  float: 'left',
-                  margin: 0,
-                  padding: 0,
-                  height: '50px',
-                  lineHeight: '50px',
-                  textIndent: '20px',
-                  textAlign: 'left',
-                  width: '85%',
-                  fontSize: '0.8rem',
-                  overflow: 'hidden'
-                }}
+    // @ts-ignore
+    let _bankList_ = [];
+    // @ts-ignore
+    let bankList = [];
+
+    // 默认当做系统关闭提现通道（即支付宝，微信，银行卡提现都关闭了）
+    let withdrawType;
+    withdrawType = false;
+
+    if (this.state.progressive === false) {
+      // 系统开启支付宝提现
+      if (data.__local_config__.withdraw_type.alipay) {
+        // 系统已开启提现通道
+        withdrawType = true;
+
+        // 构建微信,支付宝队列
+        if (data.alipay !== undefined && data.alipay) {
+          _bankList_.push({
+            id: 'alipay_' + data.alipay,
+            logo: 'alipay',
+            bankname: data.alipay,
+            bankuser: '',
+            banknum: false
+          });
+        }
+      }
+
+      // 系统开启微信提现
+      if (data.__local_config__.withdraw_type.weixin) {
+        // 系统已开启提现通道
+        withdrawType = true;
+        if (data.weixin !== undefined && data.weixin) {
+          _bankList_.push({
+            id: 'weixin_' + data.weixin,
+            logo: 'weixin',
+            bankname: data.weixin,
+            bankuser: '',
+            banknum: false
+          });
+        }
+      }
+      // 系统开启银行卡提现
+      if (data.__local_config__.withdraw_type.bankcard) {
+        // 前端逻辑合并支付宝、微信、银行卡
+        _bankList_ = _bankList_.concat(data.bank);
+        // 系统已开启提现通道
+        withdrawType = true;
+      }
+      bankList =
+        _bankList_.length === 0
+          ? []
+          : _bankList_.map((item: object) => (
+              <label
+                onClick={this.changeBank}
+                // @ts-ignore
+                htmlFor={'bankcard_' + item.id}
+                // @ts-ignore
+                key={item.id}
               >
-                {
-                  // @ts-ignore
-                  item.bankname
-                }
-                （尾号{' '}
-                {
-                  // @ts-ignore
-                  item.banknum
-                }
-                ） {item.bankuser}{' '}
-              </li>
-              <li
-                style={{
-                  listStyle: 'none',
-                  margin: '0px !important',
-                  padding: '0px !important',
-                  height: '50px',
-                  lineHeight: '50px',
-                  textAlign: 'right',
-                  width: '15%',
-                  paddingRight: '10px',
-                  float: 'right'
-                }}
-              >
-                <input
-                  // @ts-ignore
-                  id={'bankcard_' + item.id}
-                  type="radio"
-                  name="bankcard"
-                  // @ts-ignore
-                  value={item.id}
-                  style={{ margin: '10px 20px' }}
-                />
-              </li>
-            </ul>
-          </label>
-        ));
+                <ul
+                  style={{
+                    backgroundColor: this.__backcard_ClickListen__ === item.id + '' ? '#eee' : '#FFF'
+                  }}
+                >
+                  <li>
+                    <img src={'./content/images/banklogo/' + item.logo + '.png'} />
+                    {// @ts-ignore
+                    item.bankname + (item.banknum ? '（尾号 ' + item.banknum + '）' : '') + item.bankuser}
+                  </li>
+                  <li>
+                    <input
+                      // @ts-ignore
+                      id={'bankcard_' + item.id}
+                      type="radio"
+                      name="bankcard"
+                      // @ts-ignore
+                      value={item.id}
+                    />
+                  </li>
+                </ul>
+              </label>
+            ));
+    }
     // @ts-ignore
     return this.state.progressive === true ? (
       <div className="jh-body">
@@ -261,70 +298,37 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
         <ShowBodyPlaceholderHtml />
         <Enddiv />
       </div>
-    ) : data.bank.length === 0 ? (
+    ) : !withdrawType ? (
       <div className="jh-body">
         <Title name="申请提现" back="/wallet" />
-
-        <div
-          style={{
-            height: '100px',
-            lineHeight: '100px'
-          }}
-        >
-          您还没有绑定银行卡
+        <div ws-container-id="ws-withdraw-checkout">
+          <div className="nobankcard-info"> 提现通道维护中 </div>
         </div>
+        <Enddiv />
+      </div>
+    ) : bankList.length === 0 ? (
+      <div className="jh-body">
+        <Title name="申请提现" back="/wallet" />
+        <div ws-container-id="ws-withdraw-checkout">
+          <div className="nobankcard-info"> 您还没有绑定提现账号 </div>
 
-        <div style={{ width: '100vw', margin: '20px auto', textAlign: 'center', height: '50px' }}>
-          <Link to="/manage/bankcard">
-            <button
-              name="sbmit"
-              style={{
-                width: '80vw',
-                height: '40px',
-                margin: '0 auto',
-                backgroundColor: '#1976d2',
-                color: '#fff',
-                textAlign: 'center',
-                marginTop: '50px',
-                border: 'none',
-                borderRadius: '20px'
-              }}
-            >
-              立即绑卡
-            </button>
-          </Link>
+          <div className="goto-bind">
+            <Link to="/manage/withdrawAccountManage">
+              <button name="sbmit"> 立即绑卡 </button>
+            </Link>
+          </div>
         </div>
-
         <Enddiv />
       </div>
     ) : (
       <div className="jh-body">
         <Title name="申请提现" back="/wallet" />
 
-        <div ws-container-id="body">
+        <div ws-container-id="ws-withdraw-checkout">
           <form onSubmit={this.handelSubmit}>
-            <div className="banklist" style={{ width: '100vw', marginTop: '20px' }}>
-              {bankList}
-            </div>
-            <div
-              className="amount"
-              style={{
-                margin: '20px 0',
-                background: '#eee',
-                textIndent: '7px',
-                padding: '15px 0 20px 0'
-              }}
-            >
-              <span
-                style={{
-                  width: '100vw',
-                  fontSize: '0.8rem',
-                  display: 'block',
-                  textAlign: 'left'
-                }}
-              >
-                申请提现
-              </span>
+            <div className="banklist">{bankList}</div>
+            <div className="amount">
+              <span> 申请提现 </span>
               <input
                 type="text"
                 name="amount"
@@ -334,71 +338,20 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
                 // @ts-ignore
                 value={this.state.amount}
                 onChange={this.inputAmount}
-                style={{
-                  width: '100vw',
-                  fontSize: '1rem',
-                  border: 'none',
-                  backgroundColor: '#eee',
-                  height: '50px',
-                  textIndent: '10px',
-                  borderBottom: '1px solid #ddd'
-                }}
               />
-              <span
-                style={{
-                  width: '100vw',
-                  fontSize: '0.8rem',
-                  display: 'block',
-                  textAlign: 'left',
-                  height: '40px',
-                  lineHeight: '40px'
-                }}
-              >
-                可用余额
-                <span
-                  style={{
-                    fontSize: '0.8rem',
-                    fontWeight: 'bold',
-                    padding: '0 2px'
-                  }}
-                >
-                  {data.account ? data.account.availableBalance : '0.00'}
-                </span>
-                元
+              <span>
+                可用余额<i>{data.account ? data.account.availableBalance : '0.00'}</i>元
               </span>
             </div>
 
             {// @ts-ignore
             this.state.lockSbmitBtn ? (
-              <input
-                type="submit"
-                name="sbmit"
-                disabled
-                style={{
-                  width: '80vw',
-                  height: '40px',
-                  margin: '0 auto',
-                  color: '#fff',
-                  textAlign: 'center',
-                  marginTop: '50px',
-                  border: 'none',
-                  borderRadius: '20px'
-                }}
-                value="提交申请"
-              />
+              <input type="submit" name="sbmit" disabled value="提交申请" />
             ) : (
               <input
                 type="submit"
                 name="sbmit"
                 style={{
-                  width: '80vw',
-                  height: '40px',
-                  margin: '0 auto',
-                  color: '#fff',
-                  textAlign: 'center',
-                  marginTop: '50px',
-                  border: 'none',
-                  borderRadius: '20px',
                   backgroundColor: '#1976d2'
                 }}
                 value="提交申请"

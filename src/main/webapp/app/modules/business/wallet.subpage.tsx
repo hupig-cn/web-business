@@ -258,7 +258,7 @@ export default function BottomAppBar(props) {
                   // @ts-ignore
                   className={classes.waterListTitle}
                 >
-                  {item.createdate.substring(0, 16)}
+                  {item.createdate ? item.createdate.substring(0, 16) : '-'}
                 </div>
               </Link>
               <div

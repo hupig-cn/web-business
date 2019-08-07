@@ -117,6 +117,18 @@ export const Api = {
     error: null,
     progressive: APP_BODY_FILL_WAIT
   },
+  // 绑定支付宝、微信账号
+  tsxBindWithdrawAccount: {
+    api_debug: '',
+    // 查询用户微信、支付宝账号
+    api_findUserAlipayWinxinAccount: '/basic/api/userbankcard/findAllUserBankCard/',
+    // 创建微信、支付宝账号
+    api_createWithdrawAccount: '',
+    data: {},
+    loading: APP_BODY_HOLD_WAIT,
+    error: null,
+    progressive: APP_BODY_FILL_WAIT
+  },
   responseParse: (response: object, dataType: object) => {
     const objv = obj => Object.prototype.toString.call(obj) === '[object Object]';
     const arrv = arr => Object.prototype.toString.call(arr) === '[object Array]';

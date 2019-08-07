@@ -9,3 +9,121 @@
   margin: 0 auto;
   text-align: center;
 }
+div[ws-container-id='ws-withdraw-checkout'] {
+  form > div.banklist {
+    width: 100vw;
+    margin-top: 20px;
+    label {
+      width: 100vw;
+      display: inline-block;
+      margin: 0px;
+      padding: 0px;
+      height: 44px;
+      ul {
+        width: 100vw;
+        height: 50px;
+        border-bottom: 1px solid rgb(221, 221, 221);
+        background-color: rgb(255, 255, 255);
+        li:first-child {
+          float: left;
+          height: 50px;
+          line-height: 50px;
+          text-indent: 20px;
+          text-align: left;
+          width: 85%;
+          font-size: 0.8rem;
+          overflow: hidden;
+          img {
+            width: 25px;
+            margin-right: 6px;
+            border-radius: 13px;
+          }
+        }
+        li:last-child {
+          height: 50px;
+          line-height: 50px;
+          text-align: right;
+          width: 15%;
+          float: right;
+          input {
+            margin: 10px 20px;
+          }
+        }
+      }
+    }
+  }
+  form > div.amount {
+    margin: 20px auto;
+    background: rgb(238, 238, 238);
+    text-indent: 7px;
+    padding: 15px 0px 20px;
+    width: 96vw;
+    overflow: hidden;
+
+    span:first-child {
+      width: 100vw;
+      font-size: 0.8rem;
+      display: block;
+      text-align: left;
+    }
+    span:last-child {
+      width: 95vw;
+      font-size: 0.8rem;
+      display: block;
+      text-align: left;
+      height: 40px;
+      line-height: 40px;
+      i {
+        font-size: 0.8rem;
+        font-weight: bold;
+        padding: 0px 2px;
+      }
+    }
+    input[type='text'] {
+      width: 95vw;
+      font-size: 1rem;
+      border-top: none;
+      border-right: none;
+      border-bottom: 1px solid rgb(221, 221, 221);
+      border-left: none;
+      border-image: initial;
+      background-color: rgb(238, 238, 238);
+      height: 50px;
+      text-indent: 10px;
+    }
+    input[type='text']:focus {
+      outline: 0;
+    }
+  }
+  form > input[type='submit'] {
+    width: 80vw;
+    height: 40px;
+    margin: 50px auto 0px;
+    color: rgb(255, 255, 255);
+    text-align: center;
+    border: none;
+    border-radius: 20px;
+  }
+  & > div.nobankcard-info {
+    height: 100px;
+    line-height: 100px;
+  }
+  & > div.goto-bind {
+    width: 100vw;
+    margin: 20px auto;
+    text-align: center;
+    height: 50px;
+
+    & button {
+      width: 80vw;
+      height: 40px;
+      margin: 0 auto;
+      background-color: #1976d2;
+      color: #fff;
+      text-align: center;
+      margin-top: 50px;
+      border: none;
+      border-radius: 20px;
+    }
+  }
+}

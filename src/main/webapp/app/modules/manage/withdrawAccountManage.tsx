@@ -13,6 +13,7 @@ import Enddiv from '../../shared/menu/enddiv';
 // 专用接口请求模块
 import { Axios, Api, ShowBodyPlaceholderHtml, DEBUG as RequestDebug } from 'app/request';
 import Utils from 'app/utils';
+import './withdrawAccountManage.scss';
 
 export interface IManageProp extends StateProps, DispatchProps {}
 
@@ -169,7 +170,15 @@ export class Manage extends React.Component<IManageProp> {
   };
 
   changeBank = (e: any) => {
-    document.getElementById('banklog-viewer').setAttribute('src', '/content/images/banklogo/' + e.target.value + '.png');
+    const banklogoElem = document.getElementById('banklog-viewer');
+    if (e.target.value === '') {
+      banklogoElem.setAttribute('style', 'display: none');
+    } else {
+      const logo = '/content/images/banklogo/' + e.target.value + '.png';
+      banklogoElem.setAttribute('src', logo);
+      banklogoElem.setAttribute('style', 'dislpay: block');
+    }
+
     this.setState({
       form_bankicon: e.target.value,
       form_bank: e.target.selectedOptions[0].innerText
@@ -202,7 +211,7 @@ export class Manage extends React.Component<IManageProp> {
     if (state.progressive === true) {
       return (
         <div className="jh-personal">
-          <Title name="银行卡" back="/manage" />
+          <Title name="提现账号管理" back="/manage" />
           <ShowBodyPlaceholderHtml />
         </div>
       );
@@ -228,29 +237,8 @@ export class Manage extends React.Component<IManageProp> {
     }
     // @ts-ignore
     const userCardList = state.data.userCardList.map((item: object, index: number) => (
-      <div
-        key={index + 1}
-        className="card"
-        style={{
-          width: '90vw',
-          margin: '10px auto',
-          height: '60px',
-          backgroundColor: '#fff',
-          borderRadius: '10px 10px 0 0',
-          display: 'block',
-          overflow: 'hidden'
-        }}
-      >
-        <div
-          className="bklogo"
-          style={{
-            width: '60px',
-            height: '60px',
-            lineHeight: '60px',
-            textAlign: 'center',
-            float: 'left'
-          }}
-        >
+      <div key={index + 1} className="ws-bankcard-item card">
+        <div className="bklogo">
           <img
             // @ts-ignore
             src={'./content/images/banklogo/' + item.logo + '.png'}
@@ -258,17 +246,7 @@ export class Manage extends React.Component<IManageProp> {
           />
         </div>
 
-        <div
-          className="bkinfo"
-          style={{
-            width: '120px',
-            height: '60px',
-            lineHeight: '20px',
-            float: 'left',
-            fontSize: '0.8rem',
-            paddingTop: '10px'
-          }}
-        >
+        <div className="bkinfo">
           {
             // @ts-ignore
             item.bankname
@@ -280,16 +258,7 @@ export class Manage extends React.Component<IManageProp> {
           }
         </div>
 
-        <div
-          className="bkaccount"
-          style={{
-            width: 'auto',
-            height: '60px',
-            lineHeight: '60px',
-            textAlign: 'right',
-            paddingRight: '20px'
-          }}
-        >
+        <div className="bkaccount">
           {'**** '}
           {// @ts-ignore
           item.banknum.substr(-4)}
@@ -302,13 +271,30 @@ export class Manage extends React.Component<IManageProp> {
 
     return (
       <div className="jh-personal">
-        <Title name="银行卡" back="/manage" />
+        <Title name="提现账号管理" back="/manage" />
 
         {/* <RequestLoadingWait loading={this.state.loading} /> */}
 
-        <div ws-container-id="main">
-          <div style={{ height: '20px', width: '100%' }}>
-            <div style={{ display: 'none' }}>
+        <div ws-container-id="withdrawAccountManage">
+          <div className="ws-main-weixin">
+            <div className="logo">
+              <img src="./content/images/banklogo/weixin.svg" />
+            </div>
+            <Link className="link" to="/manage/bindWithdrawAccount">
+              <div className="unactive">您还没有绑定微信号</div>
+            </Link>
+          </div>
+          <div className="ws-main-alipay">
+            <div className="logo">
+              <img src="./content/images/banklogo/alipay.svg" />
+            </div>
+
+            <Link className="link" to="/manage/bindWithdrawAccount">
+              <div className="unactive">您还没有绑定支付宝号</div>
+            </Link>
+          </div>
+          <div className="ws-bank-tool">
+            <div>
               <Link to="">绑定</Link>
               <Link
                 // @ts-ignore
@@ -320,14 +306,7 @@ export class Manage extends React.Component<IManageProp> {
           </div>
           {// @ts-ignore
           state.data.userCardList.length > 0 ? (
-            <div
-              style={{
-                fontSize: '0.9rem',
-                textIndent: '5vw',
-                width: '100vw',
-                display: 'block'
-              }}
-            >
+            <div className="ws-mybank-totals">
               {'我的银行卡 '}
               {
                 // @ts-ignore
@@ -341,53 +320,22 @@ export class Manage extends React.Component<IManageProp> {
           {userCardList}
           {// @ts-ignore
           state.data.userCardList.length > 0 && state.data.userCardList.length < 4 ? (
-            <div
-              style={{
-                width: '100vw',
-                height: '35px',
-                lineHeight: '35px',
-                marginTop: '45px',
-                backgroundColor: '#ddd',
-                color: '#fff',
-                textAlign: 'center'
-              }}
-            >
-              添加卡片
-            </div>
+            <div className="ws-add-bankcard-title">添加卡片</div>
           ) : // @ts-ignore
           state.data.userCardList.length === 0 ? (
-            <div
-              style={{
-                textAlign: 'center',
-                height: '120px',
-                lineHeight: '120px',
-                fontWeight: 'bold'
-              }}
-            >
-              您还没有绑定银行卡 ?
-            </div>
+            <div className="ws-no-bankcard-notice">您还没有绑定银行卡 ?</div>
           ) : (
             ' '
           )}{' '}
           {// @ts-ignore
           state.data.userCardList.length < 4 ? (
-            <div className="addAccount" style={{ fontSize: '0.8rem' }}>
+            <div className="ws-add-bankcard-form">
               <form method="post" onSubmit={this.handelSubmit}>
-                <div style={{ width: '100vw', height: '50px' }}>
-                  <div className="titles" style={{ float: 'left', width: '20vw', lineHeight: '50px', textAlign: 'right' }}>
-                    开户银行 *
-                  </div>
-                  <div className="input" style={{ float: 'left', width: '75vw', lineHeight: '50px' }}>
+                <div>
+                  <div className="ws-add-bankcard-form-titles">开户银行 *</div>
+                  <div className="ws-add-bankcard-form-input">
                     <select
                       name="uname"
-                      style={{
-                        textIndent: '6px',
-                        width: '100%',
-                        height: '35px',
-                        border: 'none',
-                        borderBottom: '1px solid #ddd',
-                        backgroundColor: '#fff'
-                      }}
                       defaultValue="SB000001"
                       // @ts-ignore
                       value={state.form_bankicon}
@@ -409,22 +357,13 @@ export class Manage extends React.Component<IManageProp> {
                     </select>
                   </div>
                 </div>
-                <div style={{ width: 0, height: 0, clear: 'both' }} />
+                <div />
 
-                <div style={{ width: '100vw', height: '50px' }}>
-                  <div className="titles" style={{ float: 'left', width: '20vw', lineHeight: '50px', textAlign: 'right' }}>
-                    银行账号 *
-                  </div>
-                  <div className="input" style={{ float: 'left', width: '75vw', lineHeight: '50px' }}>
+                <div>
+                  <div className="ws-add-bankcard-form-titles">银行账号 *</div>
+                  <div className="ws-add-bankcard-form-input">
                     <input
                       style={{
-                        width: '100%',
-                        height: '35px',
-                        verticalAlign: 'middle',
-                        lineHeight: '35px',
-                        border: 'none',
-                        borderBottom: '1px solid #ddd',
-                        backgroundColor: 'none',
                         textIndent: '40px'
                       }}
                       type="text"
@@ -438,32 +377,15 @@ export class Manage extends React.Component<IManageProp> {
                       value={state.form_banknum}
                       onChange={this.changeBanknum}
                     />
-                    <img
-                      id="banklog-viewer"
-                      style={{ width: '30px', position: 'absolute', left: '21vw', marginTop: '10px' }}
-                      // @ts-ignore
-                      src
-                    />
+                    <img id="banklog-viewer" src="" />
                   </div>
                 </div>
-                <div style={{ width: 0, height: 0, clear: 'both' }} />
+                <div />
 
-                <div style={{ width: '100vw', height: '50px' }}>
-                  <div className="titles" style={{ float: 'left', width: '20vw', lineHeight: '50px', textAlign: 'right' }}>
-                    开户姓名 *
-                  </div>
-                  <div className="input" style={{ float: 'left', width: '75vw', lineHeight: '50px' }}>
+                <div>
+                  <div className="ws-add-bankcard-form-titles">开户姓名 *</div>
+                  <div className="ws-add-bankcard-form-input">
                     <input
-                      style={{
-                        width: '100%',
-                        height: '35px',
-                        verticalAlign: 'middle',
-                        lineHeight: '35px',
-                        border: 'none',
-                        borderBottom: '1px solid #ddd',
-                        backgroundColor: 'none',
-                        textIndent: '10px'
-                      }}
                       type="text"
                       autoComplete="off"
                       name="bankuser"
@@ -473,24 +395,12 @@ export class Manage extends React.Component<IManageProp> {
                     />
                   </div>
                 </div>
-                <div style={{ width: 0, height: 0, clear: 'both' }} />
+                <div />
 
-                <div style={{ width: '100vw', height: '50px' }}>
-                  <div className="titles" style={{ float: 'left', width: '20vw', lineHeight: '50px', textAlign: 'right' }}>
-                    预留电话 &nbsp;
-                  </div>
-                  <div className="input" style={{ float: 'left', width: '75vw', lineHeight: '50px' }}>
+                <div>
+                  <div className="ws-add-bankcard-form-titles">预留电话 &nbsp;</div>
+                  <div className="ws-add-bankcard-form-input">
                     <input
-                      style={{
-                        width: '100%',
-                        height: '35px',
-                        verticalAlign: 'middle',
-                        lineHeight: '35px',
-                        border: 'none',
-                        borderBottom: '1px solid #ddd',
-                        backgroundColor: 'none',
-                        textIndent: '10px'
-                      }}
                       type="text"
                       autoComplete="off"
                       name="bankmobile"
@@ -500,23 +410,10 @@ export class Manage extends React.Component<IManageProp> {
                     />
                   </div>
                 </div>
-                <div style={{ width: 0, height: 0, clear: 'both' }} />
+                <div />
 
-                <div style={{ width: '100vw', margin: '20px auto', textAlign: 'center', height: '50px' }}>
-                  <button
-                    type="submit"
-                    name="sbmit"
-                    style={{
-                      width: '80vw',
-                      height: '40px',
-                      margin: '0 auto',
-                      color: '#fff',
-                      textAlign: 'center',
-                      marginTop: '50px',
-                      border: 'none',
-                      borderRadius: '20px'
-                    }}
-                  >
+                <div>
+                  <button type="submit" name="sbmit">
                     立即绑卡
                   </button>
                 </div>

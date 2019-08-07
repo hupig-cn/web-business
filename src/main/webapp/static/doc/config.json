@@ -1,0 +1,3 @@
+{
+  "withdraw_type": { "alipay": 1, "weixin": 1, "bankcard": 1 }
+}
