@@ -15,16 +15,21 @@ class SampleComponent extends React.Component {
     return (
       <div>
         <SockJsClient
-          url="http://app.yuanscore.com:9090/marco"
+          url="http://app.yuanscore.com:9080/marco"
           topics={['/users/' + `${this.props.userid}` + '/message']}
           /* tslint:disable-next-line:jsx-no-lambda */
           onMessage={msg => {
-            const str = msg.split(',');
-            const xx = new SpeechSynthesisUtterance('圆积分收款' + str[1]);
-            xx.volume = 100;
-            xx.rate = 1;
-            xx.pitch = 1.5;
-            window.speechSynthesis.speak(xx);
+            if (msg.type === '2') {
+              const str = msg.message.split(',');
+              const xx = new SpeechSynthesisUtterance('圆积分' + str[1]);
+              xx.volume = 100;
+              xx.rate = 1;
+              xx.pitch = 1.5;
+              window.speechSynthesis.speak(xx);
+              toast.success(msg.message);
+            } else {
+              toast.success(msg.message);
+            }
           }}
           ref={client => {
             this.clientRef = client;
