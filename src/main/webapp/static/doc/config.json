@@ -1,3 +1,8 @@
 {
-  "withdraw_type": { "alipay": 1, "weixin": 1, "bankcard": 1 }
+  "withdraw_type": { "alipay": 1, "weixin": 0, "bankcard": 1 },
+  "withdraw_limit": { "single_limit": "100|2000", "today_limit": "5000", "month_limit": "30000" },
+  "withdraw_time": [
+    { "st": "09:00", "et": "23:59", "info": "预计2小时内到账" },
+    { "st": "00:00", "et": "08:59", "info": "预计上午10:00前到账" }
+  ]
 }

@@ -111,7 +111,7 @@ export default function LongMenu(props) {
               </IconButton>
             </Link>
           </div>
-          <div className={classes.login}>{props.shop ? props.shop.hot_line : '-未公开-'}</div>
+          <div className={classes.login}>{props.shop ? props.shop.hot_line : '未公开'}</div>
         </div>
       </div>
       <BottomNavigation
@@ -131,18 +131,16 @@ export default function LongMenu(props) {
           label={props.shop ? '昨日收入：' + props.shop.yestoday_income : '昨日收入：0.00'}
           value="scan"
           icon={
-            <Link to="/wallet">
-              <span
-                style={{
-                  fontWeight: 'normal',
-                  color: '#fff',
-                  fontSize: '1.4rem',
-                  marginBottom: '5px'
-                }}
-              >
-                钱包: {props.shop ? props.shop.balance : '0.00'}
-              </span>
-            </Link>
+            <span
+              style={{
+                fontWeight: 'normal',
+                color: '#fff',
+                fontSize: '1.4rem',
+                marginBottom: '5px'
+              }}
+            >
+              钱包: {props.shop ? props.shop.balance : '0.00'}
+            </span>
           }
         />
       </BottomNavigation>

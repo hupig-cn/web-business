@@ -44,7 +44,7 @@ export class Wallet extends React.Component<IHomeProp> {
         // tslint:disable-next-line: no-this-assignment
         const that = this;
         // @ts-ignore
-        Axios.all([this.api_findUserBalance(info.data.id), this.api_withdrawWaterList(info.data.id, 0, 50)]).then(
+        Axios.all([this.api_findUserBalance(info.data.id), this.api_withdrawWaterList(info.data.id, 0, 100)]).then(
           // @ts-ignore
           // tslint:disable-next-line: only-arrow-functions
           Axios.spread((findUserBalance, withdrawWaterList) => {

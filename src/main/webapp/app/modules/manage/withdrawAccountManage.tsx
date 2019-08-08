@@ -82,13 +82,18 @@ export class Manage extends React.Component<IManageProp> {
 
             window.console.debug(findUserBankcardList.data.data, cardlist.data.data);
 
+            const response_data = findUserBankcardList.data.data[0];
             that.setState({
               AUTHORUSER: info,
               loading: false,
               progressive: false,
               data: {
-                userCardList: findUserBankcardList.data.data,
-                list_of_bank_support: cardlist.data.data
+                userCardList: Api.responseParse(response_data['listbank'], []),
+                list_of_bank_support: cardlist.data.data,
+                alipay: response_data['alipay'],
+                weixin: response_data['wechat'],
+                weixin_name: response_data['wechatName'] ? response_data['wechatName'] : '未署名',
+                alipay_name: response_data['alipayName'] ? response_data['alipayName'] : '未署名'
               }
             });
           })
@@ -281,7 +286,11 @@ export class Manage extends React.Component<IManageProp> {
               <img src="./content/images/banklogo/weixin.svg" />
             </div>
             <Link className="link" to="/manage/bindWithdrawAccount">
-              <div className="unactive">您还没有绑定微信号</div>
+              {this.state.data.weixin ? (
+                <div>{this.state.data.weixin + '（' + this.state.data.weixin_name + '）'}</div>
+              ) : (
+                <div className="unactive">您还没有绑定微信号</div>
+              )}
             </Link>
           </div>
           <div className="ws-main-alipay">
@@ -290,7 +299,11 @@ export class Manage extends React.Component<IManageProp> {
             </div>
 
             <Link className="link" to="/manage/bindWithdrawAccount">
-              <div className="unactive">您还没有绑定支付宝号</div>
+              {this.state.data.alipay ? (
+                <div>{this.state.data.alipay + '（' + this.state.data.alipay_name + '）'}</div>
+              ) : (
+                <div className="unactive">您还没有绑定支付宝号</div>
+              )}
             </Link>
           </div>
           <div className="ws-bank-tool">
@@ -336,17 +349,13 @@ export class Manage extends React.Component<IManageProp> {
                   <div className="ws-add-bankcard-form-input">
                     <select
                       name="uname"
-                      defaultValue="SB000001"
                       // @ts-ignore
                       value={state.form_bankicon}
                       onChange={this.changeBank}
                     >
-                      <option
-                        key="SB000001"
-                        value=""
-                        // @ts-ignore
-                      >
-                        请选择
+                      <option key="SB000001" value="">
+                        {' '}
+                        请选择{' '}
                       </option>
                       {// @ts-ignore
                       state.data.list_of_bank_support.map((bank, index) => (

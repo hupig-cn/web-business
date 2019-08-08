@@ -6,6 +6,9 @@ div.jh-body {
     list-style: none !important;
   }
 }
+.hide {
+  display: none !important;
+}
 div[ws-container-id='withdrawAccountManage'] {
   div.ws-main-weixin,
   div.ws-main-alipay {
@@ -30,10 +33,12 @@ div[ws-container-id='withdrawAccountManage'] {
     }
     & > .link div {
       float: left;
-      width: 87%;
+      width: 80%;
       line-height: 50px;
       font-weight: normal;
-      font-size: 0.95rem !important;
+      font-size: 0.9rem !important;
+      overflow: hidden;
+      height: 50px;
 
       &:before {
         content: ' ';
@@ -202,7 +207,7 @@ div[ws-container-id='bindWithdrawAccount'] {
       border-bottom: 1px solid #eee;
       height: 50px;
       line-height: 50px;
-      margin: 20px auto 0px;
+      margin: 10px auto 0px;
       font-size: 0.95rem;
       // background: #FFF;
       position: relative;

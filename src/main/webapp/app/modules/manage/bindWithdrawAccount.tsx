@@ -59,14 +59,25 @@ export class BindManage extends React.Component<IManageProp> {
             // 检查并纠正服务端数据格式
             findUserAlipayWinxinAccount.data = Api.responseParse(findUserAlipayWinxinAccount.data, []);
 
-            window.console.debug(findUserAlipayWinxinAccount.data.data);
+            // window.console.debug(findUserAlipayWinxinAccount.data);
 
             that.setState({
               AUTHORUSER: info,
               loading: false,
               progressive: false,
+              // 提供state 监听input输入数据
+              form_alipayAccount: findUserAlipayWinxinAccount.data.data[0]['alipay'],
+              form_weixinAccount: findUserAlipayWinxinAccount.data.data[0]['wechat'],
+              form_alipayAccountRelname: findUserAlipayWinxinAccount.data.data[0]['alipayName'],
+              form_weixinAccountRelname: findUserAlipayWinxinAccount.data.data[0]['wechatName'],
               data: {
-                withdrawAccount: findUserAlipayWinxinAccount.data.data
+                withdrawAccount: {
+                  // 保存旧数据（用于鉴定本次保存是否真实变动的账号）
+                  alipay: findUserAlipayWinxinAccount.data.data[0]['alipay'],
+                  weixin: findUserAlipayWinxinAccount.data.data[0]['wechat'],
+                  alipay_relname: findUserAlipayWinxinAccount.data.data[0]['alipayName'],
+                  weixin_relname: findUserAlipayWinxinAccount.data.data[0]['wechatName']
+                }
               }
             });
           })
@@ -88,7 +99,11 @@ export class BindManage extends React.Component<IManageProp> {
       // @ts-ignore
       alipay: state.form_alipayAccount.trim(),
       // @ts-ignore
-      weixin: state.form_weixinAccount.trim(),
+      wechat: state.form_weixinAccount.trim(),
+      // @ts-ignore
+      alipayName: state.form_alipayAccountRelname.trim(),
+      // @ts-ignore
+      wechatName: state.form_alipayAccountRelname.trim(),
       // @ts-ignore
       userid: state.AUTHORUSER.data.id || 0
     };
@@ -97,12 +112,14 @@ export class BindManage extends React.Component<IManageProp> {
       // @ts-ignore
       post.alipay === state.data.withdrawAccount.alipay &&
       // @ts-ignore
-      post.weixin === state.data.withdrawAccount.weixin &&
+      post.wechat === state.data.withdrawAccount.weixin &&
       // @ts-ignore
-      post.form_agreement_checkbox === true
+      state.form_agreement_checkbox === true &&
+      // @ts-ignore
+      post.alipayName === state.data.withdrawAccount.alipay_relname
     ) {
       toast.success('绑定成功');
-      JQ('button[type="submit"]').remove();
+      // JQ('button[type="submit"]').remove();
       return false;
     }
 
@@ -110,7 +127,7 @@ export class BindManage extends React.Component<IManageProp> {
       toast.error('操作授权失败,请尝试重新登录');
       window.console.log('用户授权失败');
       // @ts-ignore
-    } else if (post.weixin === '') {
+    } else if (post.wechat === '') {
       toast.error('请填写真实微信账号');
       window.console.log('请填写真实微信账号');
       // @ts-ignore
@@ -118,7 +135,11 @@ export class BindManage extends React.Component<IManageProp> {
       toast.error('请填写真实支付宝账号');
       window.console.log('请填写真实支付宝账号');
       // @ts-ignore
-    } else if (post.form_agreement_checkbox === false) {
+    } else if (post.alipayName === '') {
+      toast.error('请填写支付宝和微信实名姓名');
+      window.console.log('请填写支付宝和微信实名姓名');
+      // @ts-ignore
+    } else if (state.form_agreement_checkbox === false) {
       toast.error('请确认协议项');
       window.console.log('请确认协议项');
     } else {
@@ -127,7 +148,7 @@ export class BindManage extends React.Component<IManageProp> {
       Axios.post(this.state.api_createWithdrawAccount, post)
         .then(response => {
           toast.success('绑定成功');
-          JQ('button[type="submit"]').remove();
+          // JQ('button[type="submit"]').remove();
         })
         .catch(error => {
           toast.error('绑定失败，请稍后尝试');
@@ -137,18 +158,23 @@ export class BindManage extends React.Component<IManageProp> {
   };
 
   changeAlipayAccount = (e: any) => {
-    if (/^\w+$/g.test(e.target.value) || e.target.value === '') {
+    if (/^(\w|\.|\@|\-)+$/g.test(e.target.value) || e.target.value === '') {
       this.setState({
         form_alipayAccount: e.target.value.replace(/\ /g, '')
       });
     }
   };
   changeWeixinAccount = (e: any) => {
-    if (/^\w+$/g.test(e.target.value) || e.target.value === '') {
+    if (/^(\w|\-)+$/g.test(e.target.value) || e.target.value === '') {
       this.setState({
         form_weixinAccount: e.target.value.replace(/\ /g, '')
       });
     }
+  };
+  changeAlipayAccountRelname = (e: any) => {
+    this.setState({
+      form_alipayAccountRelname: e.target.value.replace(/(\ |,|\+|\-|\_|\=|\?\~\!\@\#\$\%\^\&\*\(\)\[\]\{\}\"\:\?\>\<\/|\||\\)/g, '')
+    });
   };
   changeAgreementConfirm = (e: any) => {
     this.setState({
@@ -162,7 +188,7 @@ export class BindManage extends React.Component<IManageProp> {
     if (state.progressive === true) {
       return (
         <div className="jh-personal">
-          <Title name="移动支付收款账号" back="/manage/withdrawAccountManage" />
+          <Title name="收款账号" back="/manage/withdrawAccountManage" />
           <ShowBodyPlaceholderHtml />
         </div>
       );
@@ -185,7 +211,7 @@ export class BindManage extends React.Component<IManageProp> {
 
     return (
       <div className="jh-personal">
-        <Title name="移动支付收款账号" back="/manage/withdrawAccountManage" />
+        <Title name="收款账号" back="/manage/withdrawAccountManage" />
         <div ws-container-id="bindWithdrawAccount">
           <form method="post" onSubmit={this.handelSubmit}>
             <div className="ws-main-weixin">
@@ -194,15 +220,18 @@ export class BindManage extends React.Component<IManageProp> {
                 <input
                   type="text"
                   placeholder="请准确填写微信账号"
-                  // @ts-ignore
-                  value={this.state.form_weixinAccount}
-                  name="alipayAccount"
+                  autoComplete="off"
+                  value={
+                    // @ts-ignore
+                    this.state.form_weixinAccount
+                  }
+                  name="weixinAccount"
                   onChange={this.changeWeixinAccount}
                   // @ts-ignore
-                  maxLength="24"
+                  maxLength={24}
                 />
               </div>
-              <div className="info">?</div>
+              <div className="info hide">?</div>
             </div>
 
             <div className="ws-main-alipay">
@@ -211,23 +240,41 @@ export class BindManage extends React.Component<IManageProp> {
                 <input
                   type="text"
                   placeholder="请准确填写支付宝账号"
-                  // @ts-ignore
-                  value={this.state.form_alipayAccount}
+                  autoComplete="off"
+                  value={
+                    // @ts-ignore
+                    this.state.form_alipayAccount
+                  }
                   name="alipayAccount"
                   onChange={this.changeAlipayAccount}
-                  // @ts-ignore
-                  maxLength="24"
+                  maxLength={24}
                 />
               </div>
-              <div className="info">?</div>
+              <div className="info hide">?</div>
             </div>
 
-            <div
-              // @ts-ignore
-              className="agreement"
-            >
-              {' '}
-              {this.state.form_agreement_checkbox ? (
+            <div className="ws-main-weixin">
+              <div className="label"> 实名姓名 </div>
+              <div className="input">
+                <input
+                  type="text"
+                  placeholder="请准确填写支付宝实名姓名"
+                  autoComplete="off"
+                  value={
+                    // @ts-ignore
+                    this.state.form_alipayAccountRelname
+                  }
+                  name="alipayAccountName"
+                  onChange={this.changeAlipayAccountRelname}
+                  maxLength={24}
+                />
+              </div>
+              <div className="info hide">?</div>
+            </div>
+
+            <div className="agreement">
+              {// @ts-ignore
+              this.state.form_agreement_checkbox ? (
                 <input
                   type="checkbox"
                   id="form_agreement"

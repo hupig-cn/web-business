@@ -54,7 +54,8 @@ const useStyles = makeStyles((theme: Theme) =>
 const store = initStore();
 registerLocale(store);
 
-export default function LabelBottomNavigation(props) {
+export default function LabelBottomNavigation(props: any) {
+  // @ts-ignore
   const classes = useStyles();
   const [value, setValue] = React.useState(props.bottomNav ? props.bottomNav : 'work');
 

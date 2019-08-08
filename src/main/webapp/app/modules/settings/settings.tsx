@@ -72,7 +72,7 @@ export class Personal extends React.Component<IPersonalProp> {
               progressive: false,
               data: {
                 shop: {
-                  logo: _ShopInfo_.merchantphoto,
+                  logo: './content/images/title.png',
                   shop_name: _ShopInfo_.name,
                   hot_line: '', // 店铺电话
                   balance: _ProfitInfo_.balance,
@@ -90,6 +90,21 @@ export class Personal extends React.Component<IPersonalProp> {
                 }
               }
             });
+
+            // todo 尝试加载商户头像，如果错误错误则不左视图改变（即填充显示系统预设图标）
+            Api.getFileBase64(_ShopInfo_.merchantphoto)
+              .then((response: any) => {
+                let data = { shop: { logo: '' } };
+                // @ts-ignore
+                data = that.state.data;
+                data.shop.logo = Api.buildFileBase64Path(response.data);
+                that.setState({ data: data });
+                window.console.log(response);
+              })
+              .catch(error => {
+                window.console.log(error);
+              });
+
             // 商户不存在
             // console.log(_goodStatistical_);
           })

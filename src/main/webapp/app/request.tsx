@@ -12,7 +12,24 @@ const APP_BODY_FILL_WAIT = true;
 const APP_SERVER_API_URL = 'services';
 const DEBUG_APP_SERVER_API_URL = 'http://wskj.tpddns.cn:32767/api/web-business'; // SERVER_API_URL
 // 接口环境：布尔 true 或 false
+// export const DEBUG = true;
 export const DEBUG = false;
+
+const instance = axios.create({
+  // 当创建实例的时候配置默认配置
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
+  baseURL: DEBUG ? DEBUG_APP_SERVER_API_URL : APP_SERVER_API_URL,
+  timeout: 5000,
+  headers: { 'X-Requested-With': 'foobar' }
+});
+
+// 初始化
+// instance.defaults.timeout = 2500;
+// @ts-ignore
+instance.all = axios.all;
+// @ts-ignore
+instance.spread = axios.spread;
 
 // 各接口配置
 export const Api = {
@@ -123,7 +140,7 @@ export const Api = {
     // 查询用户微信、支付宝账号
     api_findUserAlipayWinxinAccount: '/basic/api/userbankcard/findAllUserBankCard/',
     // 创建微信、支付宝账号
-    api_createWithdrawAccount: '',
+    api_createWithdrawAccount: '/basic/api/bindALiPayOrWeChat',
     data: {},
     loading: APP_BODY_HOLD_WAIT,
     error: null,
@@ -143,19 +160,13 @@ export const Api = {
       response['data'] = response.data['0'];
     }
     return response;
+  },
+  getFileBase64: (fileId: any) => Axios.get('/basic/api/public/myfiles/' + fileId),
+  buildFileBase64Path: (response: any) => {
+    const path = 'data:' + response.fileContentType + ';base64,';
+    return path + response.file;
   }
 };
-const instance = axios.create({
-  // 当创建实例的时候配置默认配置
-  xsrfCookieName: 'XSRF-TOKEN',
-  xsrfHeaderName: 'X-XSRF-TOKEN',
-  baseURL: DEBUG ? DEBUG_APP_SERVER_API_URL : APP_SERVER_API_URL,
-  timeout: 5000,
-  headers: { 'X-Requested-With': 'foobar' }
-});
-
-// 初始化
-// instance.defaults.timeout = 2500;
 
 const aiaxLoadTemplate = (n: boolean, props) => (
   <div style={{ width: '100vw', height: '100vh', textAlign: 'center' }}>
@@ -197,11 +208,6 @@ const style = {
   zIndex: 999 // 层级需低于顶部导航栏，否则导航栏 将被遮盖致使无法点击 返回上一页 功能
 };
 
-// @ts-ignore
-instance.all = axios.all;
-// @ts-ignore
-instance.spread = axios.spread;
-
 export const Axios = instance;
 export function PathInfoParse(path) {
   return (path || window.location.pathname).substring(1).split('/');
@@ -210,7 +216,7 @@ export function ShowBodyPlaceholderHtml(props) {
   // @ts-ignore
   return <div style={style}>{aiaxLoadTemplate(true, props)}</div>;
 }
-export default function requestLoadingWait(props) {
+export default function requestLoadingWait(props: any) {
   if (props.loading) {
     // @ts-ignore
     return <div style={style}>{aiaxLoadTemplate(false)}</div>;

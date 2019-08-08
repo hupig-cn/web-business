@@ -44,12 +44,12 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
     return response;
   };
 
-  api_getLocalConfig = () => {
+  api_getLocalConfig = (url: string) => {
     // TODO 注意此处路径层级
     // Axios 默认配置了根路径为：www.xxx.com/services
     // 故此处使用相对路径来拼接真实路径，最终为：www.xxx.com/content/doc/config.json
     // @ts-ignore
-    const response = Axios.get('../content/doc/config.json');
+    const response = Axios.get(url ? url : '../content/doc/config.json');
     return response;
   };
 
@@ -74,13 +74,19 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
 
             window.console.debug(findAllUserBankCard.data.data, findUserBalance.data.data, localConfig);
 
+            const response_data = findAllUserBankCard.data.data[0];
             that.setState({
               AUTHORUSER: info,
               loading: false,
               progressive: false,
               data: {
                 account: findUserBalance.data.data,
-                bank: findAllUserBankCard.data.data,
+                bank: Api.responseParse(response_data['listbank'], []),
+                weixin: response_data['wechat'],
+                alipay: response_data['alipay'],
+
+                weixin_name: response_data['wechatName'] ? response_data['wechatName'] : '未署名',
+                alipay_name: response_data['alipayName'] ? response_data['alipayName'] : '未署名',
                 __local_config__: localConfig.data
               }
             });
@@ -93,9 +99,10 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
   componentDidMount() {
     // @ts-ignore
     if (RequestDebug === true) {
+      const debug_url = 'http://wskj.tpddns.cn:32767/api/web-business/content/doc/config.json.php';
       // 动态获取最新数据
       // @ts-ignore
-      Axios.all([Axios.get(this.state.api_debug), this.api_getLocalConfig()]).then(
+      Axios.all([Axios.get(this.state.api_debug), this.api_getLocalConfig(debug_url)]).then(
         // @ts-ignore
         // tslint:disable-next-line: only-arrow-functions
         Axios.spread((debug_response, localConfig) => {
@@ -128,7 +135,7 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
       // @ts-ignore
       userid: state.AUTHORUSER.data.id || 0, // 当前登录用户ID
       alipay: '',
-      weixin: ''
+      wechat: ''
     };
 
     // 处理微信、支付宝收款选择器
@@ -136,19 +143,22 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
     if (state.bankcard.indexOf('weixin_') === 0) {
       post['gatheringway'] = 2;
       // @ts-ignore
-      post['weixin'] = state.bankcard.replace(/weixin_|\ /g, '');
+      post['wechat'] = state.bankcard.replace(/weixin_|\ /g, '');
+      post['bankcardid'] = '';
     }
     // @ts-ignore
     if (state.bankcard.indexOf('alipay_') === 0) {
       post['gatheringway'] = 3;
       // @ts-ignore
       post['alipay'] = state.bankcard.replace(/alipay_|\ /g, '');
+      post['bankcardid'] = '';
     }
+    post['bankcardid'] = post['bankcardid'] ? post['bankcardid'] : '';
 
     if (post.userid <= 0) {
       toast.error('操作授权失败,请尝试重新登录');
       window.console.log('用户授权失败');
-    } else if ((post.bankcardid <= 0 || !post.bankcardid) && post.alipay === '' && post.weixin === '') {
+    } else if ((post.bankcardid <= 0 || !post.bankcardid) && post.alipay === '' && post.wechat === '') {
       toast.info('请选择收款账户');
       window.console.log('请选择收款账户');
     } else if (post.withdrawalamount <= 0 || isNaN(post.withdrawalamount)) {
@@ -165,8 +175,21 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
       Axios.post(this.state.api_insertWithdraw, post)
         .then(response => {
           JQ('input[type="submit"]').attr('disabled', 'disabled');
-          toast.success('已申请成功，请等待审核');
-          JQ('input[type="submit"]').remove();
+
+          // TODO 提现时间段检测===Start=========================
+          const buildTimeString = (tt: any) => {
+            const _date_ = new Date();
+            return new Date(_date_.getFullYear(), _date_.getMonth(), _date_.getDate(), tt.split(':')[0], tt.split(':')[1]);
+          };
+          const thisTime = new Date();
+          // @ts-ignore
+          this.state.data.__local_config__.withdraw_time.map((item: any) => {
+            if (thisTime >= buildTimeString(item.st) && thisTime < buildTimeString(item.et)) {
+              toast.success('已申请成功，' + item.info);
+              JQ('input[type="submit"]').remove();
+            }
+          });
+          // TODO 提现时间段检测===END=========================
         })
         .catch(error => {
           toast.error('提现申请失败，请稍后尝试');
@@ -221,7 +244,6 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
     // 默认当做系统关闭提现通道（即支付宝，微信，银行卡提现都关闭了）
     let withdrawType;
     withdrawType = false;
-
     // @ts-ignore
     if (this.state.progressive === false) {
       // 系统开启支付宝提现
@@ -235,7 +257,7 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
             id: 'alipay_' + data.alipay,
             logo: 'alipay',
             bankname: data.alipay,
-            bankuser: '',
+            bankuser: '（' + data.alipay_name + '）',
             banknum: false
           });
         }
@@ -250,7 +272,7 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
             id: 'weixin_' + data.weixin,
             logo: 'weixin',
             bankname: data.weixin,
-            bankuser: '',
+            bankuser: '（' + data.weixin_name + '）',
             banknum: false
           });
         }
@@ -281,8 +303,10 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
                 >
                   <li>
                     <img
-                      // @ts-ignore
-                      src={'./content/images/banklogo/' + item.logo + '.png'}
+                      src={
+                        // @ts-ignore
+                        './content/images/banklogo/' + item.logo + '.png'
+                      }
                     />
                     {// @ts-ignore
                     item.bankname + (item.banknum ? '（尾号 ' + item.banknum + '）' : '') + item.bankuser}

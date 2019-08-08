@@ -38,49 +38,81 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function ListDividers(props) {
+  // @ts-ignore
   const classes = useStyles();
-
+  // 前端预定义的收款方式： 1:银行卡/ 2:微信/ 3:支付宝
   // ['-', '处理中', '成功', '失败'][props.info.status]
   // ['-', '银行卡', '微信', '支付宝'][props.info.type]}
 
   // tslint:disable-next-line: one-variable-per-declaration
-  let ma, mb;
-  if (props.info.type === '1') {
-    ma = (
-      <div>
-        <Divider light />
-        <ListItem button>
-          <ListItemText primary="到账方式 ：" />
-          <ListItemSecondaryAction> {['-', '银行卡', '微信', '支付宝'][props.info.type]}</ListItemSecondaryAction>
-        </ListItem>
-      </div>
-    );
-  }
-
-  // （非银行卡提现模式，前端不显示卡相关信息栏目 ）
-  if (props.info.type === '1') {
-    mb = (
-      <div>
-        <Divider light />
-        <ListItem button>
-          <ListItemText primary="收款银行 ：" />
-          <ListItemSecondaryAction> {props.info.bankname ? props.info.bankname : '-'} </ListItemSecondaryAction>
-        </ListItem>
-
-        <Divider light />
-        <ListItem button>
-          <ListItemText primary="收款账户 ：" />
-          {props.info.bankuser && props.info.bankaccount ? (
-            <ListItemSecondaryAction>
-              {' '}
-              {props.info.bankuser}（**** {props.info.bankaccount.substr(-4)}）
-            </ListItemSecondaryAction>
-          ) : (
-            <ListItemSecondaryAction> - </ListItemSecondaryAction>
-          )}
-        </ListItem>
-      </div>
-    );
+  let mb;
+  switch (props.info.type) {
+    // （非银行卡提现模式，前端不显示卡相关信息栏目 ）
+    case '1':
+      mb = (
+        <div>
+          <Divider light />
+          <ListItem button>
+            <ListItemText primary="收款银行 ：" />
+            <ListItemSecondaryAction> {props.info.bankname ? props.info.bankname : '-'} </ListItemSecondaryAction>
+          </ListItem>
+          <Divider light />
+          <ListItem button>
+            <ListItemText primary="收款账户 ：" />
+            {props.info.bankuser && props.info.bankaccount ? (
+              <ListItemSecondaryAction>
+                {props.info.bankuser}（**** {props.info.bankaccount.substr(-4)}）
+              </ListItemSecondaryAction>
+            ) : (
+              <ListItemSecondaryAction> - </ListItemSecondaryAction>
+            )}
+          </ListItem>
+        </div>
+      );
+      break;
+    case '2':
+      mb = (
+        <div>
+          <Divider light />
+          <ListItem button>
+            <ListItemText primary="微信账号 ：" />
+            <ListItemSecondaryAction> {props.info.wechat ? props.info.wechat : '获取失败'} </ListItemSecondaryAction>
+          </ListItem>
+          <Divider light />
+          <ListItem button>
+            <ListItemText primary="微信实名 ：" />
+            {props.info.wechatName ? (
+              <ListItemSecondaryAction>{props.info.wechatName}</ListItemSecondaryAction>
+            ) : (
+              <ListItemSecondaryAction> 获取失败 </ListItemSecondaryAction>
+            )}
+          </ListItem>
+        </div>
+      );
+      break;
+    case '3':
+      mb = (
+        <div>
+          <Divider light />
+          <ListItem button>
+            <ListItemText primary="支付宝账号 ：" />
+            <ListItemSecondaryAction> {props.info.alipay ? props.info.alipay : '获取失败'} </ListItemSecondaryAction>
+          </ListItem>
+          <Divider light />
+          <ListItem button>
+            <ListItemText primary="支付宝实名 ：" />
+            {props.info.alipayName ? (
+              <ListItemSecondaryAction>{props.info.alipayName}</ListItemSecondaryAction>
+            ) : (
+              <ListItemSecondaryAction> 获取失败 </ListItemSecondaryAction>
+            )}
+          </ListItem>
+        </div>
+      );
+      break;
+    default:
+      mb = '';
+      break;
   }
 
   return (
@@ -101,12 +133,16 @@ export default function ListDividers(props) {
             <ListItemSecondaryAction> - </ListItemSecondaryAction>
           )}
         </ListItem>
-        {ma}
+        <Divider light />
+        <ListItem button>
+          <ListItemText primary="到账方式 ：" />
+          <ListItemSecondaryAction> {['-', '银行卡', '微信', '支付宝'][props.info.type]}</ListItemSecondaryAction>
+        </ListItem>
         {mb}
         <Divider light />
         <ListItem button>
           <ListItemText primary="状态 ：" />
-          <ListItemSecondaryAction> {['-', '处理中', '成功', '失败'][props.info.status]}</ListItemSecondaryAction>
+          <ListItemSecondaryAction> {['-', '处理中', '成功', '失败'][props.info.status ? props.info.status : 0]}</ListItemSecondaryAction>
         </ListItem>
 
         <Divider light />
@@ -121,8 +157,7 @@ export default function ListDividers(props) {
       {props.info.extro ? (
         <Paper className={classes.card}>
           <Typography variant="h6" component="h6">
-            {' '}
-            ···· 审批意见 ····{' '}
+            ···· 审批意见 ····
           </Typography>
           <Typography component="p">{props.info.extro}</Typography>
         </Paper>

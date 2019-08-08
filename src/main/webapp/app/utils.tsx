@@ -33,14 +33,17 @@ UTILS.prototype.priceValidate = (s: string) => {
 };
 // @ts-ignore
 UTILS.prototype.beautifulPriceText = (s: string) => {
+  return s;
+
   // tslint:disable-next-line: no-invalid-this
   if (this.beautifulPrice) {
     return parseInt(s.replace(/\,/g, ''), 10);
   }
-  const S = parseInt((' ' + s).trim(), 10);
-  if (S >= 0) {
-    return S;
-  }
+  let number;
+  number = parseFloat((s + '').replace(/(\ |,)/g, '').trim()).toString();
+  number = number.split('.');
+  number.length === 1 && number.push('00');
+
   return false;
 };
 export default new UTILS();
