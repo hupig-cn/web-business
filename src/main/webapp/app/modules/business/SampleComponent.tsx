@@ -16,6 +16,7 @@ class SampleComponent extends React.Component {
       <div>
         <SockJsClient
           url="http://localhost:9090/marco"
+          // @ts-ignore
           topics={['/users/' + `${this.props.userid}` + '/message']}
           /* tslint:disable-next-line:jsx-no-lambda */
           onMessage={msg => {
