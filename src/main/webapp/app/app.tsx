@@ -16,6 +16,7 @@ import { hasAnyAuthority } from 'app/shared/auth/private-route';
 import ErrorBoundary from 'app/shared/error/error-boundary';
 import { AUTHORITIES } from 'app/config/constants';
 import AppRoutes from 'app/routes';
+import SampleComponent from 'app/modules/business/SampleComponent';
 // import BottomNavigation from 'app/shared/menu/bottomnavigation';
 import Enddiv from 'app/shared/menu/enddiv';
 
@@ -33,6 +34,7 @@ export class App extends React.Component<IAppProps> {
   }
 
   render() {
+    const { account } = this.props;
     return (
       <Router basename={baseHref}>
         <div className="app-container">
@@ -46,6 +48,7 @@ export class App extends React.Component<IAppProps> {
           {/* <ErrorBoundary> */}
           {/* <BottomNavigation /> */}
           {/* </ErrorBoundary> */}
+          <SampleComponent userid={account.id} />
         </div>
       </Router>
     );
@@ -58,7 +61,8 @@ const mapStateToProps = ({ authentication, applicationProfile, locale }: IRootSt
   isAdmin: hasAnyAuthority(authentication.account.authorities, [AUTHORITIES.ADMIN]),
   ribbonEnv: applicationProfile.ribbonEnv,
   isInProduction: applicationProfile.inProduction,
-  isSwaggerEnabled: applicationProfile.isSwaggerEnabled
+  isSwaggerEnabled: applicationProfile.isSwaggerEnabled,
+  account: authentication.account
 });
 
 const mapDispatchToProps = { setLocale, getSession, getProfile };
