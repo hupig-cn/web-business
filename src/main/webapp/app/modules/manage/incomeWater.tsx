@@ -56,6 +56,7 @@ export class IncomeWater extends React.Component<IHomeProp> {
     // @ts-ignore
     Axios.get(url)
       .then(response => {
+        // tslint:disable-next-line: object-literal-shorthand
         this.setState({ loading: false, progressive: false, navType: navType, data: response.data.data });
         // console.log(92, this.state);
       })

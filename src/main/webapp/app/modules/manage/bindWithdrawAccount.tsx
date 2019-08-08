@@ -94,8 +94,11 @@ export class BindManage extends React.Component<IManageProp> {
     };
     // TODO 账号未发生变化，直接返回成功
     if (
+      // @ts-ignore
       post.alipay === state.data.withdrawAccount.alipay &&
+      // @ts-ignore
       post.weixin === state.data.withdrawAccount.weixin &&
+      // @ts-ignore
       post.form_agreement_checkbox === true
     ) {
       toast.success('绑定成功');
@@ -114,6 +117,7 @@ export class BindManage extends React.Component<IManageProp> {
     } else if (post.alipay === '') {
       toast.error('请填写真实支付宝账号');
       window.console.log('请填写真实支付宝账号');
+      // @ts-ignore
     } else if (post.form_agreement_checkbox === false) {
       toast.error('请确认协议项');
       window.console.log('请确认协议项');
@@ -148,6 +152,7 @@ export class BindManage extends React.Component<IManageProp> {
   };
   changeAgreementConfirm = (e: any) => {
     this.setState({
+      // @ts-ignore
       form_agreement_checkbox: !this.state.form_agreement_checkbox
     });
   };
@@ -189,9 +194,11 @@ export class BindManage extends React.Component<IManageProp> {
                 <input
                   type="text"
                   placeholder="请准确填写微信账号"
+                  // @ts-ignore
                   value={this.state.form_weixinAccount}
                   name="alipayAccount"
                   onChange={this.changeWeixinAccount}
+                  // @ts-ignore
                   maxLength="24"
                 />
               </div>
@@ -204,16 +211,22 @@ export class BindManage extends React.Component<IManageProp> {
                 <input
                   type="text"
                   placeholder="请准确填写支付宝账号"
+                  // @ts-ignore
                   value={this.state.form_alipayAccount}
                   name="alipayAccount"
                   onChange={this.changeAlipayAccount}
+                  // @ts-ignore
                   maxLength="24"
                 />
               </div>
               <div className="info">?</div>
             </div>
 
-            <div className="agreement">
+            <div
+              // @ts-ignore
+              className="agreement"
+            >
+              {' '}
               {this.state.form_agreement_checkbox ? (
                 <input
                   type="checkbox"

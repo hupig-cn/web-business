@@ -132,12 +132,16 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
     };
 
     // 处理微信、支付宝收款选择器
+    // @ts-ignore
     if (state.bankcard.indexOf('weixin_') === 0) {
       post['gatheringway'] = 2;
+      // @ts-ignore
       post['weixin'] = state.bankcard.replace(/weixin_|\ /g, '');
     }
+    // @ts-ignore
     if (state.bankcard.indexOf('alipay_') === 0) {
       post['gatheringway'] = 3;
+      // @ts-ignore
       post['alipay'] = state.bankcard.replace(/alipay_|\ /g, '');
     }
 
@@ -184,6 +188,7 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
   };
 
   changeBank = (e: any) => {
+    // @ts-ignore
     this.__backcard_ClickListen__ = e.target.value;
     this.setState({
       bankcard: e.target.value,
@@ -217,6 +222,7 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
     let withdrawType;
     withdrawType = false;
 
+    // @ts-ignore
     if (this.state.progressive === false) {
       // 系统开启支付宝提现
       if (data.__local_config__.withdraw_type.alipay) {
@@ -269,11 +275,15 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
               >
                 <ul
                   style={{
+                    // @ts-ignore
                     backgroundColor: this.__backcard_ClickListen__ === item.id + '' ? '#eee' : '#FFF'
                   }}
                 >
                   <li>
-                    <img src={'./content/images/banklogo/' + item.logo + '.png'} />
+                    <img
+                      // @ts-ignore
+                      src={'./content/images/banklogo/' + item.logo + '.png'}
+                    />
                     {// @ts-ignore
                     item.bankname + (item.banknum ? '（尾号 ' + item.banknum + '）' : '') + item.bankuser}
                   </li>

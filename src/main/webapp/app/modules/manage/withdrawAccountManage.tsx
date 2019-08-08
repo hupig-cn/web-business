@@ -261,7 +261,7 @@ export class Manage extends React.Component<IManageProp> {
         <div className="bkaccount">
           {'**** '}
           {// @ts-ignore
-          item.banknum.substr(-4)}
+          item.banknum ? item.banknum.substr(-4) : item.banknum}
         </div>
       </div>
     ));
