@@ -286,7 +286,9 @@ export class Manage extends React.Component<IManageProp> {
               <img src="./content/images/banklogo/weixin.svg" />
             </div>
             <Link className="link" to="/manage/bindWithdrawAccount">
-              {this.state.data.weixin ? (
+              {// @ts-ignore
+              this.state.data.weixin ? (
+                // @ts-ignore
                 <div>{this.state.data.weixin + '（' + this.state.data.weixin_name + '）'}</div>
               ) : (
                 <div className="unactive">您还没有绑定微信号</div>
@@ -299,7 +301,9 @@ export class Manage extends React.Component<IManageProp> {
             </div>
 
             <Link className="link" to="/manage/bindWithdrawAccount">
-              {this.state.data.alipay ? (
+              {// @ts-ignore
+              this.state.data.alipay ? (
+                // @ts-ignore
                 <div>{this.state.data.alipay + '（' + this.state.data.alipay_name + '）'}</div>
               ) : (
                 <div className="unactive">您还没有绑定支付宝号</div>

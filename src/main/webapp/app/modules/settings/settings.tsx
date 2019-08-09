@@ -92,12 +92,15 @@ export class Personal extends React.Component<IPersonalProp> {
             });
 
             // todo 尝试加载商户头像，如果错误错误则不左视图改变（即填充显示系统预设图标）
+            // @ts-ignore
             Api.getFileBase64(_ShopInfo_.merchantphoto)
               .then((response: any) => {
                 let data = { shop: { logo: '' } };
                 // @ts-ignore
                 data = that.state.data;
+                // @ts-ignore
                 data.shop.logo = Api.buildFileBase64Path(response.data);
+                // tslint:disable-next-line: object-literal-shorthand
                 that.setState({ data: data });
                 window.console.log(response);
               })
