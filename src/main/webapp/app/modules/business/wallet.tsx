@@ -52,7 +52,7 @@ export class Wallet extends React.Component<IHomeProp> {
             findUserBalance.data = Api.responseParse(findUserBalance.data, {});
             withdrawWaterList.data = Api.responseParse(withdrawWaterList.data, []);
 
-            window.console.debug(findUserBalance.data.data, withdrawWaterList.data.data);
+            // window.console.debug(findUserBalance.data.data, withdrawWaterList.data.data);
 
             that.setState({
               AUTHORUSER: info,

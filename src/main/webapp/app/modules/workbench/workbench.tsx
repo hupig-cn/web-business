@@ -121,7 +121,7 @@ export class Personal extends React.Component<IPersonalProp> {
         <Income income={repos.income} shop={repos.shop} />
         <Workicon />
         <Order order={repos.order} />
-        <Commodity commodity={repos.commodity} />
+        {/* <Commodity commodity={repos.commodity} /> */}
       </div>
     );
   }

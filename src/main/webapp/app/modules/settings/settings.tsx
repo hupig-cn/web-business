@@ -61,7 +61,7 @@ export class Personal extends React.Component<IPersonalProp> {
             ShopInfo.data = Api.responseParse(ShopInfo.data, {});
             ProfitInfo.data = Api.responseParse(ProfitInfo.data, {});
 
-            window.console.debug(ShopBalance.data.data, ShopInfo.data.data, ProfitInfo.data.data);
+            // window.console.debug(ShopBalance.data.data, ShopInfo.data.data, ProfitInfo.data.data);
 
             const _ShopBalance_ = ShopBalance.data.data;
             const _ShopInfo_ = ShopInfo.data.data;
@@ -102,7 +102,7 @@ export class Personal extends React.Component<IPersonalProp> {
                 data.shop.logo = Api.buildFileBase64Path(response.data);
                 // tslint:disable-next-line: object-literal-shorthand
                 that.setState({ data: data });
-                window.console.log(response);
+                // window.console.log(response);
               })
               .catch(error => {
                 window.console.log(error);
@@ -146,7 +146,7 @@ export class Personal extends React.Component<IPersonalProp> {
         />
 
         <Shop shop={repos.shop} />
-        <Bankcard bankcard={repos.bankcard} />
+        {/* <Bankcard bankcard={repos.bankcard} /> */}
         <img
           style={{
             width: '100%',

@@ -80,7 +80,7 @@ export class Manage extends React.Component<IManageProp> {
             cardlist.data = Api.responseParse(cardlist.data, []);
             findUserBankcardList.data = Api.responseParse(findUserBankcardList.data, []);
 
-            window.console.debug(findUserBankcardList.data.data, cardlist.data.data);
+            // window.console.debug(findUserBankcardList.data.data, cardlist.data.data);
 
             const response_data = findUserBankcardList.data.data[0];
             that.setState({
@@ -178,10 +178,12 @@ export class Manage extends React.Component<IManageProp> {
     const banklogoElem = document.getElementById('banklog-viewer');
     if (e.target.value === '') {
       banklogoElem.setAttribute('style', 'display: none');
+      e.target.setAttribute('style', 'padding-left: 0px');
     } else {
       const logo = '/content/images/banklogo/' + e.target.value + '.png';
       banklogoElem.setAttribute('src', logo);
-      banklogoElem.setAttribute('style', 'dislpay: block');
+      banklogoElem.setAttribute('style', '');
+      e.target.setAttribute('style', 'padding-left: 28px');
     }
 
     this.setState({
@@ -281,7 +283,7 @@ export class Manage extends React.Component<IManageProp> {
         {/* <RequestLoadingWait loading={this.state.loading} /> */}
 
         <div ws-container-id="withdrawAccountManage">
-          <div className="ws-main-weixin">
+          <div className="ws-main-weixin hide">
             <div className="logo">
               <img src="./content/images/banklogo/weixin.svg" />
             </div>
@@ -313,12 +315,7 @@ export class Manage extends React.Component<IManageProp> {
           <div className="ws-bank-tool">
             <div>
               <Link to="">绑定</Link>
-              <Link
-                // @ts-ignore
-                to=""
-              >
-                解绑
-              </Link>
+              <Link to="/">解绑</Link>
             </div>
           </div>
           {// @ts-ignore
@@ -358,8 +355,7 @@ export class Manage extends React.Component<IManageProp> {
                       onChange={this.changeBank}
                     >
                       <option key="SB000001" value="">
-                        {' '}
-                        请选择{' '}
+                        {' 请指定开户行 '}
                       </option>
                       {// @ts-ignore
                       state.data.list_of_bank_support.map((bank, index) => (
@@ -376,9 +372,6 @@ export class Manage extends React.Component<IManageProp> {
                   <div className="ws-add-bankcard-form-titles">银行账号 *</div>
                   <div className="ws-add-bankcard-form-input">
                     <input
-                      style={{
-                        textIndent: '40px'
-                      }}
                       type="text"
                       autoComplete="off"
                       name="banknum"

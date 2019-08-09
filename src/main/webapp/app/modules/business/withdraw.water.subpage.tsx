@@ -31,7 +31,8 @@ const useStyles = makeStyles((theme: Theme) =>
     card: {
       padding: theme.spacing(3, 2),
       '& > p': {
-        marginTop: '10px'
+        marginTop: '10px',
+        color: '#6d6d6d'
       }
     }
   })
@@ -155,12 +156,10 @@ export default function ListDividers(props) {
         <Divider light />
       </List>
       {props.info.extro ? (
-        <Paper className={classes.card}>
-          <Typography variant="h6" component="h6">
-            ···· 审批意见 ····
-          </Typography>
-          <Typography component="p">{props.info.extro}</Typography>
-        </Paper>
+        <div className={classes.card}>
+          <h6>···· 审批意见 ····</h6>
+          <p>{props.info.extro}</p>
+        </div>
       ) : (
         ''
       )}

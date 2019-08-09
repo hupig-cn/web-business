@@ -47,7 +47,7 @@ export class Wallet extends React.Component<IHomeProp> {
           Axios.spread((findWithdrawInfo: any) => {
             // 检查并纠正服务端数据格式
             findWithdrawInfo.data = Api.responseParse(findWithdrawInfo.data, {});
-            window.console.debug(findWithdrawInfo.data.data);
+            // window.console.debug(findWithdrawInfo.data.data);
 
             that.setState({ AUTHORUSER: info, loading: false, progressive: false, data: findWithdrawInfo.data.data });
           })

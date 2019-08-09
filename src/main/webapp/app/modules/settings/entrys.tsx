@@ -40,7 +40,7 @@ export default function ListDividers(props) {
     <List component="nav" className={classes.root} aria-label="Mailbox folders">
       <ListItem button style={{ padding: '0px 16px 0px 16px' }}>
         <ListItemText primary="累计销售额" secondary={props.entrys ? props.entrys.amount : '0.00'} />
-        <span> &gt; </span>
+        {/* <span> &gt; </span> */}
       </ListItem>
       <Divider />
 

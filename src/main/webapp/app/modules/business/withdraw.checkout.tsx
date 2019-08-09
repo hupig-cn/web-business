@@ -72,7 +72,7 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
             findAllUserBankCard.data = Api.responseParse(findAllUserBankCard.data, []);
             findUserBalance.data = Api.responseParse(findUserBalance.data, {});
 
-            window.console.debug(findAllUserBankCard.data.data, findUserBalance.data.data, localConfig);
+            // window.console.debug(findAllUserBankCard.data.data, findUserBalance.data.data, localConfig);
 
             const response_data = findAllUserBankCard.data.data[0];
             that.setState({
@@ -160,13 +160,13 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
       window.console.log('用户授权失败');
     } else if ((post.bankcardid <= 0 || !post.bankcardid) && post.alipay === '' && post.wechat === '') {
       toast.info('请选择收款账户');
-      window.console.log('请选择收款账户');
+      window.console.log('请选择收款账户', post);
     } else if (post.withdrawalamount <= 0 || isNaN(post.withdrawalamount)) {
       toast.info('提现金额无效');
-      window.console.log('提现金额无效');
+      window.console.log('提现金额无效', post);
     } else if (post.withdrawalamount > ab_balance) {
       toast.info('提现金额超限');
-      window.console.log('提现金额超限');
+      window.console.log('提现金额超限，Max：' + parseInt(ab_balance.toString(), 10) + ' 元', post);
     } else {
       this.lockSbmitBtn(true);
       Axios.defaults.headers['Content-Type'] = 'application/json; charset=utf-8';
@@ -177,18 +177,19 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
           JQ('input[type="submit"]').attr('disabled', 'disabled');
 
           // TODO 提现时间段检测===Start=========================
-          const buildTimeString = (tt: any) => {
+          const buildTimeString = (tt: any, seconds: any) => {
             const _date_ = new Date();
-            return new Date(_date_.getFullYear(), _date_.getMonth(), _date_.getDate(), tt.split(':')[0], tt.split(':')[1]);
+            return new Date(_date_.getFullYear(), _date_.getMonth(), _date_.getDate(), tt.split(':')[0], tt.split(':')[1], seconds);
           };
           const thisTime = new Date();
           // @ts-ignore
           this.state.data.__local_config__.withdraw_time.map((item: any) => {
-            if (thisTime >= buildTimeString(item.st) && thisTime < buildTimeString(item.et)) {
+            if (thisTime >= buildTimeString(item.st, '00') && thisTime < buildTimeString(item.et, '59')) {
               toast.success('已申请成功，' + item.info);
               JQ('input[type="submit"]').remove();
             }
           });
+          JQ('input[type="submit"]').remove();
           // TODO 提现时间段检测===END=========================
         })
         .catch(error => {
@@ -223,9 +224,7 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
     // @ts-ignore
     const value = Utils.priceValidate(e.target.value);
     // @ts-ignore
-    const ab_balance = parseFloat(this.state.data.account.availableBalance.replace(/\ |,/g, '')) * 1;
-    // tslint:disable-next-line: no-console
-    // console.log(typeof value, value);
+    // const ab_balance = parseFloat(this.state.data.account.availableBalance.replace(/\ |,/g, '')) * 1;
 
     this.setState({
       amount: value > 0 ? value : 0,
@@ -382,14 +381,7 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
             this.state.lockSbmitBtn ? (
               <input type="submit" name="sbmit" disabled value="提交申请" />
             ) : (
-              <input
-                type="submit"
-                name="sbmit"
-                style={{
-                  backgroundColor: '#1976d2'
-                }}
-                value="提交申请"
-              />
+              <input type="submit" name="sbmit" style={{ backgroundColor: '#1976d2' }} value="提交申请" />
             )}
           </form>
         </div>

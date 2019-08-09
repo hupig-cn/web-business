@@ -52,7 +52,7 @@ export class Manage extends React.Component<IManageProp> {
                     float: 'left',
                     textAlign: 'left',
                     fontSize: '0.8rem',
-                    color: '#ddd'
+                    color: '#a2a0a0'
                   }}
                 >
                   店铺资料调整
@@ -90,7 +90,7 @@ export class Manage extends React.Component<IManageProp> {
                     float: 'left',
                     textAlign: 'left',
                     fontSize: '0.8rem',
-                    color: '#ddd'
+                    color: '#a2a0a0'
                   }}
                 >
                   绑定 解绑移动收款、银行账户

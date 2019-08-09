@@ -126,23 +126,25 @@ export default function LongMenu(props) {
         value={value}
         onChange={handleChange}
       >
-        <BottomNavigationAction
-          sl-dat="234"
-          label={props.shop ? '昨日收入：' + props.shop.yestoday_income : '昨日收入：0.00'}
-          value="scan"
-          icon={
-            <span
-              style={{
-                fontWeight: 'normal',
-                color: '#fff',
-                fontSize: '1.4rem',
-                marginBottom: '5px'
-              }}
-            >
-              钱包: {props.shop ? props.shop.balance : '0.00'}
-            </span>
-          }
-        />
+        <Link to="/wallet">
+          <BottomNavigationAction
+            sl-dat="234"
+            label={props.shop ? '昨日收入：' + props.shop.yestoday_income : '昨日收入：0.00'}
+            value="scan"
+            icon={
+              <span
+                style={{
+                  fontWeight: 'normal',
+                  color: '#fff',
+                  fontSize: '1.4rem',
+                  marginBottom: '5px'
+                }}
+              >
+                钱包: {props.shop ? props.shop.balance : '0.00'}
+              </span>
+            }
+          />
+        </Link>
       </BottomNavigation>
       <div style={{ height: '147px' }} />
     </div>

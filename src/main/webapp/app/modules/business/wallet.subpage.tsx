@@ -133,27 +133,30 @@ const useStyles = makeStyles((theme: Theme) =>
     },
 
     waterListTitle: {
-      width: '60vw',
+      width: '59vw',
       textAlign: 'left',
-      textIndent: '15px'
+      textIndent: '15px',
+      overflow: 'hidden'
     },
     // @ts-ignore
     waterListAmount: {
-      width: '40vw',
+      width: '39vw',
       textAlign: 'right',
       paddingRight: '10px',
-      color: 'green',
+      color: '#999',
       fontWeight: '500',
+      overflow: 'hidden',
 
       '&[refuned="t1"]': {
         color: '#ff0000'
       }
     },
     waterListBalance: {
-      width: '40vw',
+      width: '39vw',
       textAlign: 'right',
       paddingRight: '10px',
-      color: 'green'
+      color: '#999',
+      overflow: 'hidden'
     },
     primaryALink: {
       fontWeight: 'normal',
