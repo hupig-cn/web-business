@@ -27,6 +27,8 @@ export class BindManage extends React.Component<IManageProp> {
       {
         form_alipayAccount: '',
         form_weixinAccount: '',
+        form_alipayAccountRelname: '',
+        form_weixinAccountRelname: '',
         form_agreement_checkbox: false,
         AUTHORUSER: { data: { id: 0 } }
       },
@@ -67,10 +69,10 @@ export class BindManage extends React.Component<IManageProp> {
               progressive: false,
               // 提供state 监听input输入数据
               form_agreement_checkbox: false,
-              form_alipayAccount: findUserAlipayWinxinAccount.data.data[0]['alipay'],
-              form_weixinAccount: findUserAlipayWinxinAccount.data.data[0]['wechat'],
-              form_alipayAccountRelname: findUserAlipayWinxinAccount.data.data[0]['alipayName'],
-              form_weixinAccountRelname: findUserAlipayWinxinAccount.data.data[0]['wechatName'],
+              form_alipayAccount: findUserAlipayWinxinAccount.data.data[0]['alipay'] || '',
+              form_weixinAccount: findUserAlipayWinxinAccount.data.data[0]['wechat'] || '',
+              form_alipayAccountRelname: findUserAlipayWinxinAccount.data.data[0]['alipayName'] || '',
+              form_weixinAccountRelname: findUserAlipayWinxinAccount.data.data[0]['wechatName'] || '',
               data: {
                 withdrawAccount: {
                   // 保存旧数据（用于鉴定本次保存是否真实变动的账号）
@@ -98,15 +100,15 @@ export class BindManage extends React.Component<IManageProp> {
     const state = this.state;
     const post = {
       // @ts-ignore
-      alipay: state.form_alipayAccount.trim(),
+      alipay: state.form_alipayAccount ? state.form_alipayAccount.trim() : '',
 
       // TODO 关闭微信绑定
       // @ts-ignore
-      wechat: state.form_weixinAccount.trim(),
+      wechat: state.form_weixinAccount ? state.form_weixinAccount.trim() : '',
       // @ts-ignore
-      alipayName: state.form_alipayAccountRelname.trim(),
+      alipayName: state.form_alipayAccountRelname ? state.form_alipayAccountRelname.trim() : '',
       // @ts-ignore
-      wechatName: state.form_alipayAccountRelname.trim(),
+      wechatName: state.form_alipayAccountRelname ? state.form_alipayAccountRelname.trim() : '',
       // @ts-ignore
       userid: state.AUTHORUSER.data.id || 0
     };
@@ -200,21 +202,24 @@ export class BindManage extends React.Component<IManageProp> {
       );
     }
 
-    try {
+    const submitBtn = (sstate: any) => {
       // @ts-ignore
-      if (state.form_alipayAccount !== '' && state.form_agreement_checkbox === true) {
-        // if (state.form_alipayAccount !== '' && state.form_weixinAccount !== '' && state.form_agreement_checkbox === true) {
-        JQ('button[type="submit"]')
-          .css('background', '#1976d2')
-          .removeAttr('disabled');
+      if (sstate.form_alipayAccount !== '' && sstate.form_alipayAccountRelname !== '' && sstate.form_agreement_checkbox === true) {
+        return (
+          <button type="submit" name="sbmit" style={{ backgroundColor: '#1976d2', outline: 'none' }}>
+            {' '}
+            确定{' '}
+          </button>
+        );
       } else {
-        JQ('button[type="submit"]')
-          .css('background', '')
-          .attr('disabled', 'disabled');
+        return (
+          <button type="submit" name="sbmit" style={{ outline: 'none' }} disabled>
+            {' '}
+            确定{' '}
+          </button>
+        );
       }
-    } catch (e) {
-      window.console.log(e);
-    }
+    };
 
     return (
       <div className="jh-personal">
@@ -292,12 +297,7 @@ export class BindManage extends React.Component<IManageProp> {
               />
               <label htmlFor="form_agreement">我已知晓并自行承担因错误填写收款账号导致提现失败的后果</label>
             </div>
-
-            <div>
-              <button type="submit" disabled name="sbmit">
-                确定
-              </button>
-            </div>
+            <div>{submitBtn(state)}</div>
           </form>
         </div>
 

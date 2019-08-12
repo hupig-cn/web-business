@@ -74,9 +74,24 @@ div[ws-container-id='withdrawAccountManage'] {
 
   div.ws-mybank-totals {
     font-size: 0.9rem;
-    text-indent: 5vw;
-    width: 100vw;
+    text-indent: 2vw;
     display: block;
+    width: 94vw;
+    margin: 25px auto 10px;
+    height: 20px;
+    div {
+      width: 50%;
+      float: left;
+      & > a {
+        margin: 0 10px;
+      }
+      &:first-child {
+        text-indent: 2vw;
+      }
+      &:last-child {
+        text-align: right;
+      }
+    }
   }
   div.ws-bankcard-item {
     width: 94vw;
@@ -109,6 +124,14 @@ div[ws-container-id='withdrawAccountManage'] {
       line-height: 60px;
       text-align: right;
       padding-right: 20px;
+    }
+    div.bkunbind {
+      width: auto;
+      height: 60px;
+      line-height: 60px;
+      text-align: right;
+      padding-right: 20px;
+      display: none;
     }
   }
   div.ws-add-bankcard-title {
