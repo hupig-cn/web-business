@@ -89,7 +89,9 @@ const useStyles = makeStyles((theme: Theme) =>
       lineHeight: '60px',
       textAlign: 'center',
       backgroundColor: '#f0f0f0',
-      marginTop: '170px'
+      marginTop: '170px',
+      position: 'fixed',
+      width: '100%'
     },
     waterList: {
       // height: '40vh',

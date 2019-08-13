@@ -126,9 +126,9 @@ export class IncomeWater extends React.Component<IHomeProp> {
           </div>
           <div className="price">
             <span>
-              {
-                // @ts-ignore
-                item.totals
+              {// @ts-ignore
+              item.totals.toFixed(3)
+              // parseFloat(Math.round(item.totals*1000)/1000)
               }
             </span>
           </div>
@@ -151,10 +151,8 @@ export class IncomeWater extends React.Component<IHomeProp> {
               </div>
             </div>
             <div className="price">
-              {
-                // @ts-ignore
-                subLi.singleClass.amount
-              }
+              {// @ts-ignore
+              parseFloat(subLi.singleClass.amount * 1) > 0 ? '+' + subLi.singleClass.amount : subLi.singleClass.amount}
             </div>
           </li>
         ))}
