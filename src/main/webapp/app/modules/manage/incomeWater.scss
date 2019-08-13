@@ -54,11 +54,14 @@ div.ws-body-list {
         & > div {
           width: 100%;
           float: left;
-          line-height: 40px;
-          height: 25px;
+          overflow: hidden;
+          line-height: 20px;
+          min-height: 20px;
+          max-height: 40px;
           &:last-child {
             font-size: 0.8rem;
             color: #6f6f6f;
+            line-height: normal;
           }
         }
       }
@@ -84,16 +87,29 @@ div.ws-body-list {
     //月标题列
     &.month-nav {
       height: 40px;
+      line-height: 40px;
       font-weight: bold;
       background: #eee;
-      .price::before {
-        content: '总收款：-';
+      & > div {
+        height: 40px;
+        line-height: 40px;
+        width: 50vw;
       }
-      .price[type='type1'] {
-        color: #ff0000;
-        &::before {
-          content: '总收款：+';
+      & > .month {
+        padding-left: 15px;
+        text-align: left;
+      }
+      & > .price {
+        font-weight: 500;
+        span {
+          font-weight: bold;
         }
+      }
+      .price::before {
+        content: '月汇总：';
+      }
+      .price::after {
+        content: '元 ';
       }
     }
   }

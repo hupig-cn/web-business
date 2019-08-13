@@ -102,16 +102,35 @@ export class IncomeWater extends React.Component<IHomeProp> {
     const collection = data.count ? (data.count.collection ? '(' + data.count.collection + ')' : '') : '';
     const payment = data.count ? (data.count.payment ? '(' + data.count.payment + ')' : '') : '';
     // const other = data.count ? (data.count.other ? '(' + data.count.other + ')' : '') : '';
-    const list = data.map((item: object, index: number) => (
+
+    // @ts-ignore
+    const tmp = data.map((item: object, index: number) => {
+      item['totals'] = 0;
+      // @ts-ignore
+      item.list.map((subLi: object, idex: number) => {
+        // @ts-ignore
+        item.totals += parseFloat(subLi.singleClass.amount) * 1;
+      });
+      return item;
+    });
+
+    // @ts-ignore
+    const list = tmp.map((item: object, index: number) => (
       <div key={'obj_' + index}>
         <li className="month-nav">
-          <div className="info">
-            <div>
+          <div className="month">
+            {
+              // @ts-ignore
+              item.time
+            }
+          </div>
+          <div className="price">
+            <span>
               {
                 // @ts-ignore
-                item.time
+                item.totals
               }
-            </div>
+            </span>
           </div>
         </li>
         {// @ts-ignore
@@ -132,8 +151,10 @@ export class IncomeWater extends React.Component<IHomeProp> {
               </div>
             </div>
             <div className="price">
-              {// @ts-ignore
-              '+' + subLi.singleClass.amount}
+              {
+                // @ts-ignore
+                subLi.singleClass.amount
+              }
             </div>
           </li>
         ))}
