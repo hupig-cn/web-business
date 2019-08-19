@@ -1,9 +1,8 @@
 package com.weisen.www.code.yjf.business.gateway.ratelimiting;
 
-import com.weisen.www.code.yjf.business.security.SecurityUtils;
-
 import java.time.Duration;
 import java.util.function.Supplier;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -12,11 +11,13 @@ import org.springframework.http.HttpStatus;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
+import com.weisen.www.code.yjf.business.security.SecurityUtils;
 
-import io.github.bucket4j.*;
-import io.github.bucket4j.grid.GridBucketState;
+import io.github.bucket4j.Bandwidth;
+import io.github.bucket4j.Bucket;
+import io.github.bucket4j.Bucket4j;
+import io.github.bucket4j.BucketConfiguration;
 import io.github.bucket4j.grid.ProxyManager;
-import io.github.bucket4j.grid.jcache.JCache;
 import io.github.jhipster.config.JHipsterProperties;
 
 /**
