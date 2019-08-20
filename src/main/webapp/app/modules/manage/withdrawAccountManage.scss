@@ -9,9 +9,14 @@ div.jh-body {
 .hide {
   display: none !important;
 }
+/* 错误状态 */
+form .form-error {
+  border-bottom: 1px solid #ff0000 !important;
+}
 div[ws-container-id='withdrawAccountManage'] {
   div.ws-main-weixin,
-  div.ws-main-alipay {
+  div.ws-main-alipay,
+  div.ws-main-nobankcard-notice {
     width: 94vw;
     border-bottom: 1px solid #eee;
     height: 50px;
@@ -102,6 +107,9 @@ div[ws-container-id='withdrawAccountManage'] {
     display: block;
     overflow: hidden;
     border: 1px solid rgba(0, 0, 0, 0.125);
+    div {
+      overflow: hidden;
+    }
 
     div.bklogo {
       width: 60px;
@@ -113,7 +121,7 @@ div[ws-container-id='withdrawAccountManage'] {
     div.bkinfo {
       width: 120px;
       height: 60px;
-      line-height: 20px;
+      line-height: 22px;
       float: left;
       font-size: 0.8rem;
       padding-top: 10px;
@@ -124,24 +132,60 @@ div[ws-container-id='withdrawAccountManage'] {
       line-height: 60px;
       text-align: right;
       padding-right: 20px;
+      &.unbind-active {
+        width: 35%;
+        float: left;
+      }
     }
     div.bkunbind {
-      width: auto;
+      width: 10%;
       height: 60px;
       line-height: 60px;
-      text-align: right;
-      padding-right: 20px;
+      text-align: center;
       display: none;
+      &.unbind-active {
+        display: block;
+        float: left;
+        color: #007bff;
+        font-size: 0.85rem;
+      }
     }
+  }
+  div.ws-add-bankcard-mask {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: #000;
+    opacity: 0.5;
+    z-index: 1;
   }
   div.ws-add-bankcard-title {
     width: 100vw;
     height: 35px;
     line-height: 35px;
-    margin-top: 45px;
-    background-color: rgb(221, 221, 221);
+    background-color: #000;
     color: rgb(255, 255, 255);
-    text-align: center;
+    position: absolute;
+    z-index: 3;
+    top: 150px;
+    text-align: left;
+    text-indent: 10px;
+    span {
+      color: #fff;
+      height: 20px;
+      width: 20px;
+      line-height: 15px;
+      border-radius: 10px;
+      position: absolute;
+      right: 20px;
+      top: 8px;
+      border: 1px solid #fff;
+      text-align: center;
+      text-indent: 0;
+      cursor: pointer;
+    }
   }
   div.ws-no-bankcard-notice {
     text-align: center;
@@ -151,6 +195,14 @@ div[ws-container-id='withdrawAccountManage'] {
   }
   div.ws-add-bankcard-form {
     font-size: 0.8rem;
+    position: absolute;
+    z-index: 2;
+    background: #fff;
+    left: 5px;
+    right: 5px;
+    margin-bottom: 20px;
+    top: 185px;
+    overflow: hidden;
 
     & > form > div {
       &:nth-child(odd) {
@@ -169,7 +221,7 @@ div[ws-container-id='withdrawAccountManage'] {
 
           select:focus,
           input:focus {
-            outline: 0;
+            outline: none;
           }
           select,
           input {
@@ -177,12 +229,11 @@ div[ws-container-id='withdrawAccountManage'] {
             height: 35px;
             vertical-align: middle;
             line-height: 35px;
-            border-top: none;
-            border-right: none;
+            border: none;
             border-bottom: 1px solid rgb(221, 221, 221);
-            border-left: none;
             border-image: initial;
             background: none;
+            outline: none;
           }
           select {
             text-indent: 6px;
@@ -195,7 +246,7 @@ div[ws-container-id='withdrawAccountManage'] {
             width: 25px;
             position: absolute;
             left: 21vw;
-            margin-top: -35px;
+            margin-top: 15px;
           }
         }
       }
@@ -208,10 +259,10 @@ div[ws-container-id='withdrawAccountManage'] {
         width: 100vw;
         margin: 20px auto;
         text-align: center;
-        height: 50px;
+        height: auto;
 
-        button[type='submit'] {
-          width: 80vw;
+        & > button[type='submit'] {
+          width: 60vw;
           height: 40px;
           margin: 50px auto 0px;
           color: rgb(255, 255, 255);
@@ -223,6 +274,21 @@ div[ws-container-id='withdrawAccountManage'] {
     }
   }
 }
+@media only screen and (max-width: 380px) {
+  div.bkaccount {
+    &.unbind-active {
+      width: 35% !important;
+    }
+  }
+}
+@media only screen and (max-width: 350px) {
+  div.bkaccount {
+    &.unbind-active {
+      width: 29% !important;
+    }
+  }
+}
+
 div[ws-container-id='bindWithdrawAccount'] {
   & > form {
     div.ws-main-weixin,
@@ -305,6 +371,106 @@ div[ws-container-id='bindWithdrawAccount'] {
         text-align: center;
         border: none;
         border-radius: 20px;
+      }
+    }
+  }
+}
+
+#cityPicker {
+  .cityPicker-mask {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: #ddd;
+    z-index: 10000;
+    opacity: 0.5;
+    height: 100vh;
+    overflow: hidden;
+  }
+  .cityPicker-body {
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    background: #fff;
+    z-index: 20000;
+    width: 100%;
+    left: 0px;
+    bottom: 0px;
+    top: 380px;
+
+    ._citys {
+      width: 100%;
+      height: 100%;
+      display: inline-block;
+      position: relative;
+      border-top: 1px solid #fff;
+      border-top-color: #ad1e38 !important;
+
+      span {
+        color: #fe4365;
+        height: 20px;
+        width: 20px;
+        line-height: 15px;
+        text-align: center;
+        border-radius: 10px;
+        position: absolute;
+        right: 1em;
+        top: 5px;
+        border: 1px solid #fe4365;
+        cursor: pointer;
+      }
+      ._citys0 {
+        width: 100%;
+        height: 34px;
+        display: inline-block;
+        border-bottom: 2px solid #fe4365;
+        padding: 0;
+        margin: 0;
+
+        li {
+          float: left;
+          height: 34px;
+          line-height: 34px;
+          overflow: hidden;
+          font-size: 15px;
+          color: #888;
+          width: 80px;
+          text-align: center;
+          cursor: pointer;
+
+          &.citySel {
+            background-color: #fe4365;
+            color: #fff !important;
+          }
+        }
+      }
+      ._citys1 {
+        width: 100%;
+        height: 90%;
+        display: inline-block;
+        padding: 10px 0;
+        overflow: auto;
+        a {
+          border-bottom: 1px solid #eee;
+          display: block;
+          color: #666;
+          padding-left: 6px;
+          margin-top: 0px;
+          height: 45px;
+          line-height: 45px;
+          font-size: 13px;
+          overflow: hidden;
+          text-align: center;
+          cursor: pointer;
+          font-weight: inherit;
+
+          &.selected {
+            background: #fe4365;
+            color: #fff;
+          }
+        }
       }
     }
   }
