@@ -269,7 +269,7 @@ export class Manage extends React.Component<IManageProp> {
       .replace(/\（/, '(')
       .replace(/\）/, ')')
       .replace(/\―/g, '-')
-      .replace(/\ /g, ' ')
+      .replace(/(\ )+/g, ' ')
       .trim();
     if (/^([\u4e00-\u9fa5]+|\(|\)|[a-zA-Z]|\-|\/)+$/g.test(e.target.value) || e.target.value === '') {
       e.target.removeAttribute('class');
