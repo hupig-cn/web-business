@@ -308,7 +308,9 @@ export class Withdarw extends React.Component<IWithdrwaProp> {
                       }
                     />
                     {// @ts-ignore
-                    item.bankname + (item.banknum ? '（尾号 ' + item.banknum + '）' : '') + item.bankuser}
+                    item.bankname +
+                      (item.banknum ? '（尾号 ' + item.banknum + '）' : '') +
+                      item.bankuser}
                   </li>
                   <li>
                     <input

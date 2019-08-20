@@ -2,7 +2,11 @@ import React from 'react';
 import SockJsClient from 'react-stomp';
 import { toast } from 'react-toastify';
 
-class SampleComponent extends React.Component {
+export interface ISampleComponentProps {
+  userid: number;
+}
+
+class SampleComponent extends React.Component<ISampleComponentProps> {
   private clientRef: any;
   constructor(props) {
     super(props);
