@@ -43,28 +43,6 @@ export class Manage extends React.Component<IManageProp> {
       },
       Api.tsxBankcard
     );
-
-    this.getApi = this.getApi.bind(this);
-    this.changeBank = this.changeBank.bind(this);
-    this.bindNewCard = this.bindNewCard.bind(this);
-    this.api_cardlist = this.api_cardlist.bind(this);
-    this.handelSubmit = this.handelSubmit.bind(this);
-    this.changeBanknum = this.changeBanknum.bind(this);
-    this.unbindBankcard = this.unbindBankcard.bind(this);
-    this.changeBankUser = this.changeBankUser.bind(this);
-    this.buildStablePage = this.buildStablePage.bind(this);
-    this.changeBankMobile = this.changeBankMobile.bind(this);
-    this.closeBindNewCard = this.closeBindNewCard.bind(this);
-    this.switchCityOptions = this.switchCityOptions.bind(this);
-    this.api_createBankcard = this.api_createBankcard.bind(this);
-    this.openCityPickerHtml = this.openCityPickerHtml.bind(this);
-    this.closeCityPickerHtml = this.closeCityPickerHtml.bind(this);
-    this.changeBankSubbranch = this.changeBankSubbranch.bind(this);
-    this.setAreaAndHidePicker = this.setAreaAndHidePicker.bind(this);
-    this.siwtchUnbindCardView = this.siwtchUnbindCardView.bind(this);
-    this.setCityAndFetchAreaList = this.setCityAndFetchAreaList.bind(this);
-    this.api_findUserBankcardList = this.api_findUserBankcardList.bind(this);
-    this.setProvinceAndFetchCityList = this.setProvinceAndFetchCityList.bind(this);
   }
 
   // 查询用户银行卡列表
@@ -100,7 +78,7 @@ export class Manage extends React.Component<IManageProp> {
         Axios.all([this.api_cardlist(), this.api_findUserBankcardList(info.data.id)]).then(
           // @ts-ignore
           // tslint:disable-next-line: only-arrow-functions
-          Axios.spread((cardlist, findUserBankcardList) => {
+          Axios.spread((cardlist: any, findUserBankcardList: any) => {
             // 检查并纠正服务端数据格式
             cardlist.data = Api.responseParse(cardlist.data, []);
             findUserBankcardList.data = Api.responseParse(findUserBankcardList.data, []);
@@ -113,7 +91,7 @@ export class Manage extends React.Component<IManageProp> {
               loading: false,
               progressive: false,
               data: {
-                userCardList: Api.responseParse(response_data['listbank'], []),
+                userCardList: response_data['listbank'],
                 list_of_bank_support: cardlist.data.data,
                 alipay: response_data['alipay'],
                 weixin: response_data['wechat'],
@@ -154,20 +132,20 @@ export class Manage extends React.Component<IManageProp> {
     const state = this.state;
     let post: object;
     post = {
-      // @ts-ignore 预留电话
-      bankphone: Utils.mobileValidate(state.form_bankmobile),
-      // @ts-ignore 卡号
-      bankcard: Utils.numberValidate(state.form_banknum),
       // @ts-ignore 中国xxx银行
       banktype: state.form_bank.trim(),
+      // @ts-ignore 卡号
+      bankcard: Utils.numberValidate(state.form_banknum),
       // @ts-ignore 银行类型icbc
       bankicon: state.form_bankicon.trim(),
       // @ts-ignore 开户姓名
       realname: state.form_bankuser.trim(),
-      // @ts-ignore 开户行地址
-      banksubbranch: state.form_banksubbranch.trim(),
       // @ts-ignore 开户 省 市 区县
       bankcity: [state.cpker_province_selected.trim(), state.cpker_city_selected.trim(), state.cpker_area_selected.trim()],
+      // @ts-ignore 开户行地址
+      banksubbranch: state.form_banksubbranch.trim(),
+      // @ts-ignore 预留电话
+      bankphone: Utils.mobileValidate(state.form_bankmobile),
       // @ts-ignore
       userid: state.AUTHORUSER.data.id || 0
     };
@@ -196,6 +174,7 @@ export class Manage extends React.Component<IManageProp> {
       toast.error('请填写开户行地址');
       window.console.log('请填写开户行地址');
       document.getElementById('banksubbranch').setAttribute('class', 'form-error');
+      // @ts-ignore
     } else if (post.bankphone === false && state.form_bankmobile.replace(/\ /g, '').length > 0) {
       toast.error('手机号码错误');
       window.console.log('手机号码错误');
@@ -444,6 +423,10 @@ export class Manage extends React.Component<IManageProp> {
   render() {
     const state = this.state;
     // @ts-ignore
+    const response_userCardList = state.data.userCardList;
+    // @ts-ignore
+    const state_unBindcard = state.unBindcard;
+    // @ts-ignore
     if (state.progressive === true) {
       return (
         <div className="jh-personal">
@@ -481,7 +464,7 @@ export class Manage extends React.Component<IManageProp> {
 
     // 卡片开始
     // @ts-ignore
-    const userCardList = state.data.userCardList.map((item: object, index: number) => (
+    const userCardList = response_userCardList.map((item: object, index: number) => (
       <div key={index + 1} className="ws-bankcard-item card">
         <div className="bklogo">
           <img
@@ -503,13 +486,25 @@ export class Manage extends React.Component<IManageProp> {
           }
         </div>
 
-        <div className={'bkaccount' + (state.unBindcard ? ' unbind-active' : '')}>
+        <div
+          className={
+            // @ts-ignore
+            'bkaccount' + (state_unBindcard ? ' unbind-active' : '')
+          }
+        >
           {'**** '}
           {// @ts-ignore
           item.banknum ? item.banknum.substr(-4) : item.banknum}
         </div>
 
-        <div onClick={this.unbindBankcard} data-id={item.id} className={'bkunbind' + (state.unBindcard ? ' unbind-active' : '')}>
+        <div
+          onClick={this.unbindBankcard}
+          data-id={
+            // @ts-ignore
+            item.id
+          }
+          className={'bkunbind' + (state_unBindcard ? ' unbind-active' : '')}
+        >
           删除
         </div>
       </div>
@@ -518,12 +513,12 @@ export class Manage extends React.Component<IManageProp> {
 
     // ===============为添加银行卡时的城市选择器准备数据===============
     // @ts-ignore
-    // if (state.data.userCardList.length < state.allow_bindcard_totals) {
+    // if (response_userCardList.length < state.allow_bindcard_totals) {
     // }
     // @ts-ignore
     const cpker_province = this.state.cpker_province || [];
     // @ts-ignore
-    const cpker_province_selected = this.state.cpker_province_selected || '省份';
+    const cpker_province_selected = this.state.cpker_province_selected || '省辖市';
     // @ts-ignore
     const cpker_city = this.state.cpker_city || [];
     // @ts-ignore
@@ -541,8 +536,7 @@ export class Manage extends React.Component<IManageProp> {
         <div className="cityPicker-body">
           <div className="_citys">
             <span title="关闭" id="cColse" onClick={this.closeCityPickerHtml}>
-              {' '}
-              ×{' '}
+              x
             </span>
             <ul id="_citysheng" className="_citys0">
               <li
@@ -562,7 +556,7 @@ export class Manage extends React.Component<IManageProp> {
             </ul>
             <div style={cpker_nav_show !== 'province' ? { display: 'none' } : {}} id="_citys0" className="_citys1">
               {// 省份
-              cpker_province.map((province, index) => (
+              cpker_province.map((province: any, index: any) => (
                 <a
                   key={index + 1}
                   data-id={province.id}
@@ -590,7 +584,7 @@ export class Manage extends React.Component<IManageProp> {
             </div>
             <div style={cpker_area.length === 0 || cpker_nav_show !== 'area' ? { display: 'none' } : {}} id="_citys2" className="_citys1">
               {// 区县
-              cpker_area.map((area, index) => (
+              cpker_area.map((area: any, index: any) => (
                 <a
                   key={index + 1}
                   data-id={area.id}
@@ -643,22 +637,21 @@ export class Manage extends React.Component<IManageProp> {
           </div>
 
           {// @ts-ignore
-          state.data.userCardList.length > 0 ? (
+          response_userCardList.length > 0 ? (
             <div className="ws-mybank-totals">
               <div>
                 {'我的银行卡 ' +
                   // @ts-ignore
-                  state.data.userCardList.length +
+                  response_userCardList.length +
                   ' / ' +
                   state.allow_bindcard_totals}
               </div>
               <div className="">
                 {// @ts-ignore
-                state.data.userCardList.length < state.allow_bindcard_totals ? <a onClick={this.bindNewCard}>添加</a> : null}
-                {// @ts-ignore
-                state.data.userCardList.length > 0 && !state.unBindcard ? (
+                response_userCardList.length < state.allow_bindcard_totals ? <a onClick={this.bindNewCard}>添加</a> : null}
+                {response_userCardList.length > 1 && !state_unBindcard ? (
                   <a onClick={this.siwtchUnbindCardView}>解绑</a>
-                ) : state.data.userCardList.length > 0 && state.unBindcard ? (
+                ) : response_userCardList.length > 1 && state_unBindcard ? (
                   <a onClick={this.siwtchUnbindCardView}>退出</a>
                 ) : null}
               </div>
@@ -680,7 +673,7 @@ export class Manage extends React.Component<IManageProp> {
               </div>
             </div>
           ) : // @ts-ignore
-          state.data.userCardList.length === 0 ? (
+          response_userCardList.length === 0 ? (
             <div className="ws-main-nobankcard-notice">
               <div className="logo">
                 <img src="./content/images/banklogo/bankcard.svg" />
@@ -710,7 +703,7 @@ export class Manage extends React.Component<IManageProp> {
                         {' 请选择开户银行 '}
                       </option>
                       {// @ts-ignore
-                      state.data.list_of_bank_support.map((bank, index) => (
+                      state.data.list_of_bank_support.map((bank: any, index: any) => (
                         <option key={index} value={bank.logo}>
                           {bank.bankname}
                         </option>
@@ -786,7 +779,7 @@ export class Manage extends React.Component<IManageProp> {
                       name="banksubbranch"
                       id="banksubbranch"
                       placeholder="如: 北京农商银行上地支行"
-                      maxLength="42"
+                      maxLength={42}
                       // @ts-ignore
                       value={state.form_banksubbranch}
                       onChange={this.changeBankSubbranch}
