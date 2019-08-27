@@ -2,6 +2,7 @@
 import React from 'react';
 import axios from 'axios';
 import { RepeatOneSharp } from '@material-ui/icons';
+import { object } from 'prop-types';
 
 // 是否开启网络请求时的页面同步等待效果（保留已渲染的body内容）
 const APP_BODY_HOLD_WAIT = true;
@@ -46,7 +47,8 @@ export const Api = {
       order: { unpaid: 0, paid: 0, refund: 0, day_order: 0 },
       commodity: { onsale: 0, takedown: 0, draft: 0 }
     },
-    error: null
+    error: null,
+    progressive: APP_BODY_FILL_WAIT
   },
   tsxSettings: {
     api_debug: '/settings.php',
@@ -59,7 +61,8 @@ export const Api = {
 
     data: { user: null, bankcard: null, profit: null, entrys: null },
     loading: APP_BODY_HOLD_WAIT,
-    error: null
+    error: null,
+    progressive: APP_BODY_FILL_WAIT
   },
   tsxNotice: {
     api: '/notice.php',
@@ -68,7 +71,6 @@ export const Api = {
     error: null,
     progressive: APP_BODY_FILL_WAIT
   },
-
   // 提现详情
   tsxWithdrawDetail: {
     api_debug: '/withdrawDetail.php',
@@ -119,6 +121,8 @@ export const Api = {
     api_deleteBankcard: '/basic/api/userbankcard/deleteBackCard/',
     // 查询用户银行卡列表
     api_findUserBankcardList: '/basic/api/userbankcard/findAllUserBankCard/',
+    // 查询城市列表
+    api_cityList: '/basic/api/get-next-area-pname/',
     data: {},
     loading: APP_BODY_HOLD_WAIT,
     error: null,
@@ -149,6 +153,10 @@ export const Api = {
   responseParse: (response: object, dataType: object) => {
     const objv = obj => Object.prototype.toString.call(obj) === '[object Object]';
     const arrv = arr => Object.prototype.toString.call(arr) === '[object Array]';
+    // 接口响应非json检测
+    if (typeof response !== 'object') {
+      return null;
+    }
 
     // @ts-ignore
     if (response.data === undefined || response.data === null || response.data === '') {
@@ -161,7 +169,9 @@ export const Api = {
     }
     return response;
   },
+  // 通用 读取访问文件资源
   getFileBase64: (fileId: any) => Axios.get('/basic/api/public/myfiles/' + fileId),
+  // 通用 转换问图片资源为base64图片地址
   buildFileBase64Path: (response: any) => {
     const path = 'data:' + response.fileContentType + ';base64,';
     return path + response.file;
@@ -170,25 +180,25 @@ export const Api = {
 
 const aiaxLoadTemplate = (n: boolean, props) => (
   <div style={{ width: '100vw', height: '100vh', textAlign: 'center' }}>
-    {n ? (
-      <div ws-container-id="nobody" style={{ height: '52vh', lineHeight: '96vh' }}>
-        <div>{props.msgtext ? props.msgtext : '页面加载中'}</div>
-      </div>
-    ) : (
-      ''
-    )}
-    <img
-      style={{
-        position: 'relative',
-        top: '80%',
-        backgroundColor: '#e0dddd',
-        width: '100px',
-        height: '50px',
-        padding: '20px 30px',
-        borderRadius: '30px'
-      }}
-      src="./content/images/loading2.gif"
-    />
+    <div ws-container-id="nobody" style={{ height: '45vh', marginTop: '35px', lineHeight: '85vh' }} />
+    <div ws-container-id="errormsg">
+      {
+        // <!-- background: #000; color: #fff; max-width: 230px; margin: 0 auto; padding: 15px 0; border-radius: 10px; -->
+      }
+      {n ? <p>{props.msgtext ? props.msgtext : '页面加载中'}</p> : <p />}
+      <img
+        style={{
+          position: 'relative',
+          top: '80%',
+          backgroundColor: '#e0dddd',
+          width: '100px',
+          height: '50px',
+          padding: '20px 30px',
+          borderRadius: '30px'
+        }}
+        src="./content/images/loading2.gif"
+      />
+    </div>
   </div>
 );
 
