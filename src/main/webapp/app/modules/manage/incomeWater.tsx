@@ -157,7 +157,9 @@ export class IncomeWater extends React.Component<IHomeProp> {
                   // @ts-ignore
                   subLi.singleClass.amount * 1
                 ) > 0
-                  ? '+' + subLi.singleClass.amount
+                  ? '+' +
+                    // @ts-ignore
+                    subLi.singleClass.amount
                   : subLi.singleClass.amount}
               </div>
             </li>

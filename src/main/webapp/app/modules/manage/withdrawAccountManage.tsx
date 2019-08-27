@@ -268,7 +268,9 @@ export class Manage extends React.Component<IManageProp> {
         <div className="bkaccount">
           {'**** '}
           {// @ts-ignore
-          item.banknum ? item.banknum.substr(-4) : item.banknum}
+          item.banknum
+            ? item.banknum.substr(-4)
+            : item.banknum}
         </div>
       </div>
     ));
@@ -336,7 +338,7 @@ export class Manage extends React.Component<IManageProp> {
           state.data.userCardList.length > 0 && state.data.userCardList.length < 4 ? (
             <div className="ws-add-bankcard-title">添加卡片</div>
           ) : // @ts-ignore
-          state.data.userCardList.length === 0 ? (
+            state.data.userCardList.length === 0 ? (
             <div className="ws-no-bankcard-notice">您还没有绑定银行卡 ?</div>
           ) : (
             ' '
@@ -357,12 +359,13 @@ export class Manage extends React.Component<IManageProp> {
                       <option key="SB000001" value="">
                         {' 请指定开户行 '}
                       </option>
-                      {// @ts-ignore
-                      state.data.list_of_bank_support.map((bank, index) => (
-                        <option key={index} value={bank.logo}>
-                          {bank.bankname}
-                        </option>
-                      ))}
+                      {state// @ts-ignore
+                      .data.list_of_bank_support
+                        .map((bank, index) => (
+                          <option key={index} value={bank.logo}>
+                            {bank.bankname}
+                          </option>
+                        ))}
                     </select>
                   </div>
                 </div>
